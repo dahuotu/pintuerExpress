@@ -8,6 +8,8 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 //jade示例路由
 var jadeRouter = require("./routes/jade");
+//server内置路由
+var apiRouter = require("./routes/api");
 //示例路由
 var example = require("./routes/example");
 
@@ -30,6 +32,7 @@ app.use("/jade", jadeRouter);
 //pintuer Api 示例
 app.use("/example", example);
 //API帮助文档路由
+app.use("/api", apiRouter);
 app.use("/help", express.static(__dirname + "/public/docs/api.html"));
 app.use("/tool", express.static(__dirname + "/public/tools/tool.html"));
 

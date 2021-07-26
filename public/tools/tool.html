@@ -20,9 +20,7 @@
 		<title>Node单表代码生成工具</title>
 		<link rel="stylesheet" href="../stylesheets/style.css" />
 		<script type="text/javascript" src="../javascripts/flexible.min.js"></script>
-		<style type="text/css">
-
-		</style>
+		<style type="text/css"></style>
 	</head>
 
 	<body>
@@ -33,25 +31,16 @@
 				</div>
 				<ul>
 					<li>
-						<a href="#confdb">生成 conf/db.js 代码</a>
+						<a href="#confdb">生成 conf/db.js代码</a>
 					</li>
 					<li>
-						<a href="#app">生成 app.js 入口路由代码</a>
+						<a href="#app">生成 app.js入口路由代码</a>
 					</li>
 					<li>
-						<a href="#">接口标题</a>
+						<a href="#sqlMapping">生成 dao/sqlMapping.js代码</a>
 					</li>
 					<li>
-						<a href="#">接口标题</a>
-					</li>
-					<li>
-						<a href="#">接口标题</a>
-					</li>
-					<li>
-						<a href="#">接口标题</a>
-					</li>
-					<li>
-						<a href="#">接口标题</a>
+						<a href="#dao">生成 dao/dao.js代码</a>
 					</li>
 				</ul>
 			</nav>
@@ -84,8 +73,33 @@ module.exports = {
 						<p>生成app.js 入口业务模块路由代码</p>
 						<div>
 							<pre>
-//引入comments业务路由文件路径
-var comments = require('./routes/comments');
+//放在 示例路由代码下面
+//var example = require("./routes/example");
+//example路由
+var example = require("./routes/example");
+
+//放在 pintuer Api 示例代码下面
+//app.use("/example", example);
+//example 示例
+app.use("/example", example);
+			                </pre>
+						</div>
+					</section>
+					<section id="sqlMapping">
+						<strong>生成 dao/sqlMapping.js SQL语句代码</strong>
+						<p>生成app.js 入口业务模块路由代码</p>
+						<div>
+							<pre>
+								
+			                </pre>
+						</div>
+					</section>
+					<section id="dao">
+						<strong>生成 dao/dao.js 逻辑代码</strong>
+						<p>生成app.js 入口业务模块路由代码</p>
+						<div>
+							<pre>
+								
 			                </pre>
 						</div>
 					</section>
@@ -108,10 +122,22 @@ var comments = require('./routes/comments');
 				var that = this;
 			},
 			methods: {
-				conf_db_code() {
+				conf_dbjs_code() {
 					//生成 conf/db.js MySql数据库连接配置
 
-				}
+				},
+				appjs_code() {
+					//生成 app.js入口路由代码
+
+				},
+				dao_sqlmappingjs_code() {
+					//生成 dao/表名/sqlMapping.js代码
+
+				},
+				dao_daojs_code() {
+					//生成 dao/表名/dao.js代码
+
+				},
 			},
 		});
 	</script>
