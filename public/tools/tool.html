@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no, email=no" />
+		<meta name="screen-orientation" content="portrait">
+		<meta name="full-screen" content="yes">
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="msapplication-tap-highlight" content="no">
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta content="dahuotu" name="author" />
+		<title>Node单表代码生成工具</title>
+		<link rel="stylesheet" href="../stylesheets/style.css" />
+		<script type="text/javascript" src="../javascripts/flexible.min.js"></script>
+		<style type="text/css">
+
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<nav>
+				<div class="nav-title">
+					Node单表代码生成工具
+				</div>
+				<ul>
+					<li>
+						<a href="#confdb">生成 conf/db.js 代码</a>
+					</li>
+					<li>
+						<a href="#app">生成 app.js 入口路由代码</a>
+					</li>
+					<li>
+						<a href="#">接口标题</a>
+					</li>
+					<li>
+						<a href="#">接口标题</a>
+					</li>
+					<li>
+						<a href="#">接口标题</a>
+					</li>
+					<li>
+						<a href="#">接口标题</a>
+					</li>
+					<li>
+						<a href="#">接口标题</a>
+					</li>
+				</ul>
+			</nav>
+			<article>
+				<h2>Node单表代码生成工具</h2>
+				<div class="code">
+					<section id="confdb">
+						<strong>生成 conf/db.js 代码</strong>
+						<p>MySql数据库连接配置</p>
+						<div>
+							<pre>
+/**
+ * 整个node站点MySql数据库连接配置串
+ * 存储在大火兔提供的node框架conf文件夹下，只要替换db.js或者复制以上连接串找到db.js内即可
+ */
+module.exports = {
+	mysql: {
+		host: '127.0.0.1', 	//数据主机地址
+		user: 'root',	   	//数据库用户名
+		password: '',		//数据库密码
+		database:'dahuotu',	//数据库名称
+		port: 3306 		//端口号
+	}
+};
+			                    </pre>
+						</div>
+					</section>
+					<section id="app">
+						<strong>生成 app.js 入口路由代码</strong>
+						<p>生成app.js 入口业务模块路由代码</p>
+						<div>
+							<pre>
+//引入comments业务路由文件路径
+var comments = require('./routes/comments');
+			                </pre>
+						</div>
+					</section>
+				</div>
+				<div class="mads" onclick="location.href='https://www.dahuotu.com/'">
+					作者：大火兔
+				</div>
+			</article>
+		</div>
+	</body>
+	<script type="text/javascript" src="../javascripts/vue.min.js"></script>
+	<script type="text/javascript" src="../javascripts/axios.min.js"></script>
+	<script>
+		var vm = new Vue({
+			el: '#app',
+			data: {
+
+			},
+			mounted() {
+				var that = this;
+			},
+			methods: {
+				conf_db_code() {
+					//生成 conf/db.js MySql数据库连接配置
+
+				}
+			},
+		});
+	</script>
+
+</html>
