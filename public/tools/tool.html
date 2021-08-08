@@ -20,9 +20,7 @@
 		<title>Node单表代码生成工具</title>
 		<link rel="stylesheet" href="../stylesheets/style.css" />
 		<script type="text/javascript" src="../javascripts/flexible.min.js"></script>
-		<style type="text/css">
-
-		</style>
+		<style type="text/css"></style>
 	</head>
 
 	<body>
@@ -64,9 +62,10 @@
 				<h2>生成表{{tableName}}调用代码</h2>
 				<div class="code">
 					<section id="confdb" v-if="databaseName!=''">
-						<strong>生成 conf/db.js 代码</strong>
-						<p>MySql数据库连接配置</p>
-						<div>
+						<h4><strong>生成 conf/db.js 代码</strong></h4>
+						<div class="gary">MySql数据库连接配置</div>
+						<h4>代码</h4>
+						<div class="gary">
 							<pre id="confdb_copy">
 /**
  * 整个node站点MySql数据库连接配置串
@@ -85,35 +84,31 @@ module.exports = {
 						</div>
 					</section>
 					<section id="appjs" v-if="tableName!=''">
-						<strong>生成 app.js 入口路由代码</strong>
-						<p>生成app.js 入口业务模块路由代码</p>
-						<h4>说明</h4>
-						<div>
-							<samp>
-//放在示例路由代码下面<br /> 
+						<h4><strong>生成 app.js 入口路由代码</strong></h4>
+						<div class="gary">生成app.js 入口业务模块路由代码</div>
+						<h4>调用说明</h4>
+						<div class="gary">
+							<pre>
+//放在示例路由代码下面
 //var example = require("./routes/example");
-							</samp>
+							</pre>
 						</div>
-						<h4>调用</h4>
-						<div>
+						<h4>代码</h4>
+						<div class="gary">
 							<pre>
 //{{tableName}}路由
 var {{tableName}} = require("./routes/{{tableName}}");
 			                </pre>
 						</div>
-						<h4>
-							说明
-						</h4>
-						<div>
-							<samp>
-//放在 pintuer Api 示例代码下面<br /> 
+						<h4>调用说明</h4>
+						<div class="gary">
+							<pre>
+//放在 pintuer Api 示例代码下面
 //app.use("/example", example);
-							</samp>
+							</pre>
 						</div>
-						<h4>
-							调用
-						</h4>
-						<div>
+						<h4>代码</h4>
+						<div class="gary">
 							<pre>
 //{{tableName}} 示例
 app.use("/{{tableName}}", {{tableName}});
@@ -121,15 +116,15 @@ app.use("/{{tableName}}", {{tableName}});
 						</div>
 					</section>
 					<section id="sqlMapping" v-if="tableName!=''">
-						<strong>生成 dao/{{tableName}}/sqlMapping.js</strong>
-						<p>生成 dao/{{tableName}}/sqlMapping.js SQL语句代码</p>
-						<div>
+						<h4><strong>生成 dao/{{tableName}}/sqlMapping.js</strong></h4>
+						<div class="gary">生成 dao/{{tableName}}/sqlMapping.js SQL语句代码</div>
+						<h4>代码</h4>
+						<div class="gary">
 							<pre id="sqlMapping_copy">
 /*
 {{tableName}}:CRUD SQL语句
 路径:dao/{{tableName}}/sqlMapping.js
 */
-
 var {{tableName}} = {
 	//新增一条记录，对应路由:add
 	insert: 'INSERT INTO {{tableName}}(<template v-for="(item,index) in columns">{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>) VALUES (<template v-for="(item,index) in columns">?<template v-if="index!=(columns.length-1)">,</template></template>)',
@@ -158,9 +153,10 @@ module.exports = {{tableName}};
 						</div>
 					</section>
 					<section id="routesjs" v-if="tableName!=''">
-						<strong>生成 routes/{{tableName}}.js</strong>
-						<p>生成 routes/{{tableName}}.js 路由代码</p>
-						<div>
+						<h4><strong>生成 routes/{{tableName}}.js</strong></h4>
+						<div class="gary">生成 routes/{{tableName}}.js 路由代码</div>
+						<h4>代码</h4>
+						<div class="gary">
 							<pre id="routesjs_copy">
 var express = require('express');
 var router = express.Router();
@@ -229,9 +225,10 @@ module.exports = router;
 						</div>
 					</section>
 					<section id="dao" v-if="tableName!=''">
-						<strong>生成 dao/{{tableName}}/dao.js</strong>
-						<p>生成 dao/{{tableName}}/dao.js 逻辑代码</p>
-						<div>
+						<h4><strong>生成 dao/{{tableName}}/dao.js</strong></h4>
+						<div class="gary">生成 dao/{{tableName}}/dao.js 逻辑代码</div>
+						<h4>代码</h4>
+						<div class="gary">
 							<pre id="dao_copy">
 /*
 说明:实现与MySQL交互
@@ -557,7 +554,8 @@ module.exports = {
 					</section>
 				</div>
 				<div class="mads">
-					作者：<a href="https://www.dahuotu.com/" target="_blank">大火兔</a>
+					作者：
+					<a href="https://www.dahuotu.com/" target="_blank">大火兔</a>
 				</div>
 			</article>
 		</div>
