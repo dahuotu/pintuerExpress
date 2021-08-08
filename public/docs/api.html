@@ -83,7 +83,7 @@
 				<div class="code">
 					<section id="/" v-if="tableName!=''">
 						<h4><strong>{{tableName}}/</strong></h4>
-						<div class="gary">{{tableName}} 默认接口，有返回值说明接口正常</div>
+						<div class="gary">默认接口，有返回值说明接口正常</div>
 						<h4>请求地址</h4>
 						<div class="gary">
 							http://127.0.0.1:3000/{{tableName}}/
@@ -127,7 +127,7 @@
 							</tr>
 						</table>
 						<h4>返回参数示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数字</p>
 						<div class="gary">
 							<pre>
 {
@@ -160,7 +160,6 @@ $.ajax({
         }
     },
 });
-
 										</pre>
 									</div>
 								</li>
@@ -184,7 +183,6 @@ this.$http.get("http://127.0.0.1:3000/{{tableName}}/").then(
         console.log(rep.status);
     }
 );
-
 										</pre>
 									</div>
 								</li>
@@ -210,7 +208,6 @@ axios.get('http://127.0.0.1:3000/{{tableName}}/')
     .then(function () {
         // 总是会执行
     });
-
 										</pre>
 									</div>
 								</li>
@@ -236,27 +233,17 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</ul>
 						</div>
 						<div class="clear"></div>
-						<h4>返回结果</h4>
-						<div class="gary">
-							<pre>
-{
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
-}
-							</pre>
-						</div>
 					</section>
 					<section id="add" v-if="tableName!=''">
-						<h4><strong>{{tableName}}/</strong></h4>
-						<div class="gary">{{tableName}} 默认接口，有返回值说明接口正常</div>
+						<h4><strong>{{tableName}}/add</strong></h4>
+						<div class="gary">新增一条记录，对应路由:add</div>
 						<h4>请求地址</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/add
 						</div>
 						<h4>请求方式</h4>
 						<div class="gary">
-							get
+							post
 						</div>
 						<h4>请求参数说明</h4>
 						<table class="table">
@@ -264,14 +251,14 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 								<th>参数名</th>
 								<th>参数说明</th>
 							</tr>
-							<tr>
-								<td>暂无</td>
-								<td>暂无</td>
+							<tr v-for="item in columns">
+								<td>{{item['字段名']}}</td>
+								<td>{{item['说明']}}</td>
 							</tr>
 						</table>
 						<h4>请求示例</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/add?<template v-for="(item,index) in columns">{{item['字段名']}}={{item['说明']}}<template v-if="index!=(columns.length-1)">&</template></template>
 						</div>
 						<h4>返回参数说明</h4>
 						<table class="table">
@@ -293,13 +280,13 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</tr>
 						</table>
 						<h4>返回参数示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数字</p>
 						<div class="gary">
 							<pre>
 {
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
+	"code": 0,
+	"msg": "新增成功",
+	"data": []
 }
 							</pre>
 						</div>
@@ -307,14 +294,18 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 						<div class="tabs">
 							<ul>
 								<li>
-									<input id="tab1" type="radio" name="tab" checked>
-									<label for="tab1">jquery</label>
+									<input id="add1" type="radio" name="tab" checked>
+									<label for="add1">jquery</label>
 									<div class="content">
 										<pre>
 $.ajax({
-    type: "GET",
-    url: "http://127.0.0.1:3000/{{tableName}}/",
-    data: {},
+    type: "POST",
+    url: "http://127.0.0.1:3000/{{tableName}}/add",
+    data: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    },
     dataType: "JSON",
     success: function (rep) {
         console.log(rep);
@@ -326,66 +317,77 @@ $.ajax({
         }
     },
 });
-
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab2" type="radio" name="tab">
-									<label for="tab2">vue-resource</label>
+									<input id="add2" type="radio" name="tab">
+									<label for="add2">vue-resource</label>
 									<div class="content">
 										<pre>
-this.$http.get("http://127.0.0.1:3000/{{tableName}}/").then(
-    function (rep) {
-        console.log(rep.body);
-        if (rep.body.code == "0") {
-            //成功
-            console.log(rep.body.data);
-        } else {
-            //失败
-        }
-    },
-    function (rep) {
-        //错误
-        console.log(rep.status);
+this.$http.post("http://127.0.0.1:3000/{{tableName}}/add", {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">    "{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+}).then(function (rep) {
+    console.log(rep.body);
+    if (rep.body.code == "0") {
+        //成功
+        console.log(rep.body.data);
+    } else {
+        //失败
     }
-);
-
+}, function (rep) {
+    //错误
+    console.log(rep.status);
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab3" type="radio" name="tab">
-									<label for="tab3">axios</label>
+									<input id="add3" type="radio" name="tab">
+									<label for="add3">axios</label>
 									<div class="content">
 										<pre>
-axios.get('http://127.0.0.1:3000/{{tableName}}/')
-    .then(function (rep) {
-        console.log(rep);
-        if (rep.code == '0') {
-            //成功
-            console.log(rep.data);
-        } else {
-            //失败
-        }
-    })
-    .catch(function (error) {
-        // 处理错误情况
-        console.log(error);
-    })
-    .then(function () {
-        // 总是会执行
-    });
-
+axios.post('http://127.0.0.1:3000/{{tableName}}/add', {
+    params: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    }
+}).then(function (rep) {
+    console.log(rep);
+    if (rep.code == '0') {
+        //成功
+        console.log(rep.data);
+    } else {
+        //失败
+    }
+}).catch(function (error) {
+    // 处理错误情况
+    console.log(error);
+}).then(function () {
+    // 总是会执行
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab4" type="radio" name="tab">
-									<label for="tab4">fetch</label>
+									<input id="add4" type="radio" name="tab">
+									<label for="add4">fetch</label>
 									<div class="content">
 										<pre>
-fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
+fetch('http://127.0.0.1:3000/{{tableName}}/add', {
+    method: 'post',
+    body: JSON.stringify({
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    }),
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}).then(function (data) {
     return data.text();
 }).then(function (rep) {
     console.log(rep);
@@ -395,34 +397,24 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
     } else {
         //失败
     }
-})
+});
 										</pre>
 									</div>
 								</li>
 							</ul>
 						</div>
 						<div class="clear"></div>
-						<h4>返回结果</h4>
-						<div class="gary">
-							<pre>
-{
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
-}
-							</pre>
-						</div>
 					</section>
 					<section id="del" v-if="tableName!=''">
-						<h4><strong>{{tableName}}/</strong></h4>
-						<div class="gary">{{tableName}} 默认接口，有返回值说明接口正常</div>
+						<h4><strong>{{tableName}}/del</strong></h4>
+						<div class="gary">删除一条记录，对应路由:del</div>
 						<h4>请求地址</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/del
 						</div>
 						<h4>请求方式</h4>
 						<div class="gary">
-							get
+							post
 						</div>
 						<h4>请求参数说明</h4>
 						<table class="table">
@@ -430,14 +422,14 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 								<th>参数名</th>
 								<th>参数说明</th>
 							</tr>
-							<tr>
-								<td>暂无</td>
-								<td>暂无</td>
+							<tr v-for="item in keys">
+								<td>{{item['字段名']}}</td>
+								<td>{{item['说明']}}</td>
 							</tr>
 						</table>
 						<h4>请求示例</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/del?<template v-for="(item,index) in keys">{{item['字段名']}}={{item['说明']}}<template v-if="index!=(keys.length-1)">&</template></template>
 						</div>
 						<h4>返回参数说明</h4>
 						<table class="table">
@@ -459,13 +451,13 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</tr>
 						</table>
 						<h4>返回参数示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数字</p>
 						<div class="gary">
 							<pre>
 {
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
+	"code": 0,
+	"msg": "删除成功",
+	"data": []
 }
 							</pre>
 						</div>
@@ -473,14 +465,18 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 						<div class="tabs">
 							<ul>
 								<li>
-									<input id="tab1" type="radio" name="tab" checked>
-									<label for="tab1">jquery</label>
+									<input id="del1" type="radio" name="tab" checked>
+									<label for="del1">jquery</label>
 									<div class="content">
 										<pre>
 $.ajax({
-    type: "GET",
-    url: "http://127.0.0.1:3000/{{tableName}}/",
-    data: {},
+    type: "POST",
+    url: "http://127.0.0.1:3000/{{tableName}}/del",
+    data: {
+<ol class="json">
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+    },
     dataType: "JSON",
     success: function (rep) {
         console.log(rep);
@@ -492,66 +488,77 @@ $.ajax({
         }
     },
 });
-
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab2" type="radio" name="tab">
-									<label for="tab2">vue-resource</label>
+									<input id="del2" type="radio" name="tab">
+									<label for="del2">vue-resource</label>
 									<div class="content">
 										<pre>
-this.$http.get("http://127.0.0.1:3000/{{tableName}}/").then(
-    function (rep) {
-        console.log(rep.body);
-        if (rep.body.code == "0") {
-            //成功
-            console.log(rep.body.data);
-        } else {
-            //失败
-        }
-    },
-    function (rep) {
-        //错误
-        console.log(rep.status);
+this.$http.post("http://127.0.0.1:3000/{{tableName}}/del", {
+<ol class="json">
+<template v-for="(item,index) in keys"><li class="li">    "{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+}).then(function (rep) {
+    console.log(rep.body);
+    if (rep.body.code == "0") {
+        //成功
+        console.log(rep.body.data);
+    } else {
+        //失败
     }
-);
-
+}, function (rep) {
+    //错误
+    console.log(rep.status);
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab3" type="radio" name="tab">
-									<label for="tab3">axios</label>
+									<input id="del3" type="radio" name="tab">
+									<label for="del3">axios</label>
 									<div class="content">
 										<pre>
-axios.get('http://127.0.0.1:3000/{{tableName}}/')
-    .then(function (rep) {
-        console.log(rep);
-        if (rep.code == '0') {
-            //成功
-            console.log(rep.data);
-        } else {
-            //失败
-        }
-    })
-    .catch(function (error) {
-        // 处理错误情况
-        console.log(error);
-    })
-    .then(function () {
-        // 总是会执行
-    });
-
+axios.post('http://127.0.0.1:3000/{{tableName}}/del', {
+    params: {
+<ol class="json">
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+    }
+}).then(function (rep) {
+    console.log(rep);
+    if (rep.code == '0') {
+        //成功
+        console.log(rep.data);
+    } else {
+        //失败
+    }
+}).catch(function (error) {
+    // 处理错误情况
+    console.log(error);
+}).then(function () {
+    // 总是会执行
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab4" type="radio" name="tab">
-									<label for="tab4">fetch</label>
+									<input id="del4" type="radio" name="tab">
+									<label for="del4">fetch</label>
 									<div class="content">
 										<pre>
-fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
+fetch('http://127.0.0.1:3000/{{tableName}}/del', {
+    method: 'post',
+    body: JSON.stringify({
+<ol class="json">
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+    }),
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}).then(function (data) {
     return data.text();
 }).then(function (rep) {
     console.log(rep);
@@ -561,34 +568,24 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
     } else {
         //失败
     }
-})
+});
 										</pre>
 									</div>
 								</li>
 							</ul>
 						</div>
 						<div class="clear"></div>
-						<h4>返回结果</h4>
-						<div class="gary">
-							<pre>
-{
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
-}
-							</pre>
-						</div>
 					</section>
 					<section id="delete" v-if="tableName!=''">
-						<h4><strong>{{tableName}}/</strong></h4>
-						<div class="gary">{{tableName}} 默认接口，有返回值说明接口正常</div>
+						<h4><strong>{{tableName}}/delete</strong></h4>
+						<div class="gary">通过指定条件删除记录,对应路由 delete</div>
 						<h4>请求地址</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/delete
 						</div>
 						<h4>请求方式</h4>
 						<div class="gary">
-							get
+							post
 						</div>
 						<h4>请求参数说明</h4>
 						<table class="table">
@@ -596,14 +593,14 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 								<th>参数名</th>
 								<th>参数说明</th>
 							</tr>
-							<tr>
-								<td>暂无</td>
-								<td>暂无</td>
+							<tr v-for="item in columns">
+								<td>{{item['字段名']}}</td>
+								<td>{{item['说明']}}</td>
 							</tr>
 						</table>
 						<h4>请求示例</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/delete?<template v-for="(item,index) in columns">{{item['字段名']}}={{item['说明']}}<template v-if="index!=(columns.length-1)">&</template></template>
 						</div>
 						<h4>返回参数说明</h4>
 						<table class="table">
@@ -625,13 +622,13 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</tr>
 						</table>
 						<h4>返回参数示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
+	"code": 0,
+	"msg": "删除成功",
+	"data": []
 }
 							</pre>
 						</div>
@@ -639,14 +636,18 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 						<div class="tabs">
 							<ul>
 								<li>
-									<input id="tab1" type="radio" name="tab" checked>
-									<label for="tab1">jquery</label>
+									<input id="delete1" type="radio" name="tab" checked>
+									<label for="delete1">jquery</label>
 									<div class="content">
 										<pre>
 $.ajax({
-    type: "GET",
-    url: "http://127.0.0.1:3000/{{tableName}}/",
-    data: {},
+    type: "POST",
+    url: "http://127.0.0.1:3000/{{tableName}}/delete",
+    data: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    },
     dataType: "JSON",
     success: function (rep) {
         console.log(rep);
@@ -658,66 +659,77 @@ $.ajax({
         }
     },
 });
-
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab2" type="radio" name="tab">
-									<label for="tab2">vue-resource</label>
+									<input id="delete2" type="radio" name="tab">
+									<label for="delete2">vue-resource</label>
 									<div class="content">
 										<pre>
-this.$http.get("http://127.0.0.1:3000/{{tableName}}/").then(
-    function (rep) {
-        console.log(rep.body);
-        if (rep.body.code == "0") {
-            //成功
-            console.log(rep.body.data);
-        } else {
-            //失败
-        }
-    },
-    function (rep) {
-        //错误
-        console.log(rep.status);
+this.$http.post("http://127.0.0.1:3000/{{tableName}}/delete", {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">    "{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+}).then(function (rep) {
+    console.log(rep.body);
+    if (rep.body.code == "0") {
+        //成功
+        console.log(rep.body.data);
+    } else {
+        //失败
     }
-);
-
+}, function (rep) {
+    //错误
+    console.log(rep.status);
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab3" type="radio" name="tab">
-									<label for="tab3">axios</label>
+									<input id="delete3" type="radio" name="tab">
+									<label for="delete3">axios</label>
 									<div class="content">
 										<pre>
-axios.get('http://127.0.0.1:3000/{{tableName}}/')
-    .then(function (rep) {
-        console.log(rep);
-        if (rep.code == '0') {
-            //成功
-            console.log(rep.data);
-        } else {
-            //失败
-        }
-    })
-    .catch(function (error) {
-        // 处理错误情况
-        console.log(error);
-    })
-    .then(function () {
-        // 总是会执行
-    });
-
+axios.post('http://127.0.0.1:3000/{{tableName}}/delete', {
+    params: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    }
+}).then(function (rep) {
+    console.log(rep);
+    if (rep.code == '0') {
+        //成功
+        console.log(rep.data);
+    } else {
+        //失败
+    }
+}).catch(function (error) {
+    // 处理错误情况
+    console.log(error);
+}).then(function () {
+    // 总是会执行
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab4" type="radio" name="tab">
-									<label for="tab4">fetch</label>
+									<input id="delete4" type="radio" name="tab">
+									<label for="delete4">fetch</label>
 									<div class="content">
 										<pre>
-fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
+fetch('http://127.0.0.1:3000/{{tableName}}/delete', {
+    method: 'post',
+    body: JSON.stringify({
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    }),
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}).then(function (data) {
     return data.text();
 }).then(function (rep) {
     console.log(rep);
@@ -727,34 +739,24 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
     } else {
         //失败
     }
-})
+});
 										</pre>
 									</div>
 								</li>
 							</ul>
 						</div>
 						<div class="clear"></div>
-						<h4>返回结果</h4>
-						<div class="gary">
-							<pre>
-{
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
-}
-							</pre>
-						</div>
 					</section>
 					<section id="edit" v-if="tableName!=''">
-						<h4><strong>{{tableName}}/</strong></h4>
-						<div class="gary">{{tableName}} 默认接口，有返回值说明接口正常</div>
+						<h4><strong>{{tableName}}/edit</strong></h4>
+						<div class="gary">更新一条记录，对应路由:edit</div>
 						<h4>请求地址</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/edit
 						</div>
 						<h4>请求方式</h4>
 						<div class="gary">
-							get
+							post
 						</div>
 						<h4>请求参数说明</h4>
 						<table class="table">
@@ -762,14 +764,18 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 								<th>参数名</th>
 								<th>参数说明</th>
 							</tr>
-							<tr>
-								<td>暂无</td>
-								<td>暂无</td>
+							<tr v-for="item in columns">
+								<td>{{item['字段名']}}</td>
+								<td>{{item['说明']}}</td>
+							</tr>
+							<tr v-for="item in keys">
+								<td>{{item['字段名']}}</td>
+								<td>{{item['说明']}}</td>
 							</tr>
 						</table>
 						<h4>请求示例</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/edit?<template v-for="(item,index) in columns">{{item['字段名']}}={{item['说明']}}</template><template v-for="(item,index) in keys">{{item['字段名']}}={{item['说明']}}<template v-if="index!=(keys.length-1)">&</template></template>
 						</div>
 						<h4>返回参数说明</h4>
 						<table class="table">
@@ -791,13 +797,13 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</tr>
 						</table>
 						<h4>返回参数示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
+	"code": 0,
+	"msg": "修改成功",
+	"data": []
 }
 							</pre>
 						</div>
@@ -805,14 +811,19 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 						<div class="tabs">
 							<ul>
 								<li>
-									<input id="tab1" type="radio" name="tab" checked>
-									<label for="tab1">jquery</label>
+									<input id="edit1" type="radio" name="tab" checked>
+									<label for="edit1">jquery</label>
 									<div class="content">
 										<pre>
 $.ajax({
-    type: "GET",
-    url: "http://127.0.0.1:3000/{{tableName}}/",
-    data: {},
+    type: "POST",
+    url: "http://127.0.0.1:3000/{{tableName}}/edit",
+    data: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+    },
     dataType: "JSON",
     success: function (rep) {
         console.log(rep);
@@ -824,66 +835,80 @@ $.ajax({
         }
     },
 });
-
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab2" type="radio" name="tab">
-									<label for="tab2">vue-resource</label>
+									<input id="edit2" type="radio" name="tab">
+									<label for="edit2">vue-resource</label>
 									<div class="content">
 										<pre>
-this.$http.get("http://127.0.0.1:3000/{{tableName}}/").then(
-    function (rep) {
-        console.log(rep.body);
-        if (rep.body.code == "0") {
-            //成功
-            console.log(rep.body.data);
-        } else {
-            //失败
-        }
-    },
-    function (rep) {
-        //错误
-        console.log(rep.status);
+this.$http.post("http://127.0.0.1:3000/{{tableName}}/edit", {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+}).then(function (rep) {
+    console.log(rep.body);
+    if (rep.body.code == "0") {
+        //成功
+        console.log(rep.body.data);
+    } else {
+        //失败
     }
-);
-
+}, function (rep) {
+    //错误
+    console.log(rep.status);
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab3" type="radio" name="tab">
-									<label for="tab3">axios</label>
+									<input id="edit3" type="radio" name="tab">
+									<label for="edit3">axios</label>
 									<div class="content">
 										<pre>
-axios.get('http://127.0.0.1:3000/{{tableName}}/')
-    .then(function (rep) {
-        console.log(rep);
-        if (rep.code == '0') {
-            //成功
-            console.log(rep.data);
-        } else {
-            //失败
-        }
-    })
-    .catch(function (error) {
-        // 处理错误情况
-        console.log(error);
-    })
-    .then(function () {
-        // 总是会执行
-    });
-
+axios.post('http://127.0.0.1:3000/{{tableName}}/edit', {
+    params: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+    }
+}).then(function (rep) {
+    console.log(rep);
+    if (rep.code == '0') {
+        //成功
+        console.log(rep.data);
+    } else {
+        //失败
+    }
+}).catch(function (error) {
+    // 处理错误情况
+    console.log(error);
+}).then(function () {
+    // 总是会执行
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab4" type="radio" name="tab">
-									<label for="tab4">fetch</label>
+									<input id="edit4" type="radio" name="tab">
+									<label for="edit4">fetch</label>
 									<div class="content">
 										<pre>
-fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
+fetch('http://127.0.0.1:3000/{{tableName}}/edit', {
+    method: 'post',
+    body: JSON.stringify({
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in keys"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(keys.length-1)">,</template></li></template>
+</ol>
+    }),
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}).then(function (data) {
     return data.text();
 }).then(function (rep) {
     console.log(rep);
@@ -893,7 +918,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
     } else {
         //失败
     }
-})
+});
 										</pre>
 									</div>
 								</li>
@@ -902,15 +927,15 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 						<div class="clear"></div>
 					</section>
 					<section id="update" v-if="tableName!=''">
-						<h4><strong>{{tableName}}/</strong></h4>
-						<div class="gary">{{tableName}} 默认接口，有返回值说明接口正常</div>
+						<h4><strong>{{tableName}}/update</strong></h4>
+						<div class="gary">更新指定条件的记录，对应路由:update</div>
 						<h4>请求地址</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/update
 						</div>
 						<h4>请求方式</h4>
 						<div class="gary">
-							get
+							post
 						</div>
 						<h4>请求参数说明</h4>
 						<table class="table">
@@ -918,14 +943,18 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 								<th>参数名</th>
 								<th>参数说明</th>
 							</tr>
-							<tr>
-								<td>暂无</td>
-								<td>暂无</td>
+							<tr v-for="item in columns">
+								<td>{{item['字段名']}}</td>
+								<td>{{item['说明']}}</td>
+							</tr>
+							<tr v-for="item in columns">
+								<td>条件{{item['字段名']}}</td>
+								<td>条件{{item['说明']}}</td>
 							</tr>
 						</table>
 						<h4>请求示例</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/
+							http://127.0.0.1:3000/{{tableName}}/update?<template v-for="(item,index) in columns">{{item['字段名']}}={{item['说明']}}</template><template v-for="(item,index) in columns">que{{item['字段名']}}={{item['说明']}}<template v-if="index!=(columns.length-1)">&</template></template>
 						</div>
 						<h4>返回参数说明</h4>
 						<table class="table">
@@ -947,13 +976,13 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</tr>
 						</table>
 						<h4>返回参数示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
+	"code": 0,
+	"msg": "修改成功",
+	"data": []
 }
 							</pre>
 						</div>
@@ -961,14 +990,19 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 						<div class="tabs">
 							<ul>
 								<li>
-									<input id="tab1" type="radio" name="tab" checked>
-									<label for="tab1">jquery</label>
+									<input id="update1" type="radio" name="tab" checked>
+									<label for="update1">jquery</label>
 									<div class="content">
 										<pre>
 $.ajax({
-    type: "GET",
-    url: "http://127.0.0.1:3000/{{tableName}}/",
-    data: {},
+    type: "POST",
+    url: "http://127.0.0.1:3000/{{tableName}}/update",
+    data: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in columns"><li class="li">	"que{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    },
     dataType: "JSON",
     success: function (rep) {
         console.log(rep);
@@ -980,66 +1014,80 @@ $.ajax({
         }
     },
 });
-
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab2" type="radio" name="tab">
-									<label for="tab2">vue-resource</label>
+									<input id="update2" type="radio" name="tab">
+									<label for="update2">vue-resource</label>
 									<div class="content">
 										<pre>
-this.$http.get("http://127.0.0.1:3000/{{tableName}}/").then(
-    function (rep) {
-        console.log(rep.body);
-        if (rep.body.code == "0") {
-            //成功
-            console.log(rep.body.data);
-        } else {
-            //失败
-        }
-    },
-    function (rep) {
-        //错误
-        console.log(rep.status);
+this.$http.post("http://127.0.0.1:3000/{{tableName}}/update", {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in columns"><li class="li">	"que{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+}).then(function (rep) {
+    console.log(rep.body);
+    if (rep.body.code == "0") {
+        //成功
+        console.log(rep.body.data);
+    } else {
+        //失败
     }
-);
-
+}, function (rep) {
+    //错误
+    console.log(rep.status);
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab3" type="radio" name="tab">
-									<label for="tab3">axios</label>
+									<input id="update3" type="radio" name="tab">
+									<label for="update3">axios</label>
 									<div class="content">
 										<pre>
-axios.get('http://127.0.0.1:3000/{{tableName}}/')
-    .then(function (rep) {
-        console.log(rep);
-        if (rep.code == '0') {
-            //成功
-            console.log(rep.data);
-        } else {
-            //失败
-        }
-    })
-    .catch(function (error) {
-        // 处理错误情况
-        console.log(error);
-    })
-    .then(function () {
-        // 总是会执行
-    });
-
+axios.post('http://127.0.0.1:3000/{{tableName}}/update', {
+    params: {
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in columns"><li class="li">	"que{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    }
+}).then(function (rep) {
+    console.log(rep);
+    if (rep.code == '0') {
+        //成功
+        console.log(rep.data);
+    } else {
+        //失败
+    }
+}).catch(function (error) {
+    // 处理错误情况
+    console.log(error);
+}).then(function () {
+    // 总是会执行
+});
 										</pre>
 									</div>
 								</li>
 								<li>
-									<input id="tab4" type="radio" name="tab">
-									<label for="tab4">fetch</label>
+									<input id="update4" type="radio" name="tab">
+									<label for="update4">fetch</label>
 									<div class="content">
 										<pre>
-fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
+fetch('http://127.0.0.1:3000/{{tableName}}/update', {
+    method: 'post',
+    body: JSON.stringify({
+<ol class="json">
+<template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}",</li></template>
+<template v-for="(item,index) in columns"><li class="li">	"que{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
+</ol>
+    }),
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}).then(function (data) {
     return data.text();
 }).then(function (rep) {
     console.log(rep);
@@ -1049,23 +1097,13 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
     } else {
         //失败
     }
-})
+});
 										</pre>
 									</div>
 								</li>
 							</ul>
 						</div>
 						<div class="clear"></div>
-						<h4>返回结果</h4>
-						<div class="gary">
-							<pre>
-{
-  "code": "0",
-  "msg": "sucess",
-  "data": ""
-}
-							</pre>
-						</div>
 					</section>
 					<section id="id" v-if="tableName!=''">
 						<h4><strong>{{tableName}}/id</strong></h4>
@@ -1128,7 +1166,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/').then(function (data) {
 							</tr>
 						</table>
 						<h4>返回结果示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
@@ -1320,7 +1358,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/id', {
 							</tr>
 						</table>
 						<h4>返回结果示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
@@ -1346,7 +1384,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/id', {
 										<pre>
 $.ajax({
     type: "GET",
-    url: "http://127.0.0.1:3000/{{tableName}}/page",
+    url: "http://127.0.0.1:3000/{{tableName}}/query",
     data: {
 <ol class="json">
 <template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
@@ -1371,7 +1409,7 @@ $.ajax({
 									<label for="query2">vue-resource</label>
 									<div class="content">
 										<pre>
-this.$http.get("http://127.0.0.1:3000/{{tableName}}/page", {
+this.$http.get("http://127.0.0.1:3000/{{tableName}}/query", {
 <ol class="json">
 <template v-for="(item,index) in columns"><li class="li">    "{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
 </ol>
@@ -1387,7 +1425,6 @@ this.$http.get("http://127.0.0.1:3000/{{tableName}}/page", {
     //错误
     console.log(rep.status);
 });
-
 										</pre>
 									</div>
 								</li>
@@ -1396,7 +1433,7 @@ this.$http.get("http://127.0.0.1:3000/{{tableName}}/page", {
 									<label for="query3">axios</label>
 									<div class="content">
 										<pre>
-axios.get('http://127.0.0.1:3000/{{tableName}}/page', {
+axios.get('http://127.0.0.1:3000/{{tableName}}/query', {
     params: {
 <ol class="json">
 <template v-for="(item,index) in columns"><li class="li">	"{{item['字段名']}}": "{{item['说明']}}"<template v-if="index!=(columns.length-1)">,</template></li></template>
@@ -1416,7 +1453,6 @@ axios.get('http://127.0.0.1:3000/{{tableName}}/page', {
 }).then(function () {
     // 总是会执行
 });
-
 										</pre>
 									</div>
 								</li>
@@ -1425,7 +1461,7 @@ axios.get('http://127.0.0.1:3000/{{tableName}}/page', {
 									<label for="query4">fetch</label>
 									<div class="content">
 										<pre>
-fetch('http://127.0.0.1:3000/{{tableName}}/page', {
+fetch('http://127.0.0.1:3000/{{tableName}}/query', {
     method: 'get',
     body: JSON.stringify({
 <ol class="json">
@@ -1514,7 +1550,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/page', {
 							</tr>
 						</table>
 						<h4>返回结果示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
@@ -1692,7 +1728,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/list', {
 							</tr>
 						</table>
 						<h4>返回结果示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
@@ -1841,10 +1877,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/top', {
 						</table>
 						<h4>请求示例</h4>
 						<div class="gary">
-							http://127.0.0.1:3000/{{tableName}}/page?
-							<template v-for="(item,index) in columns">{{item['字段名']}}={{item['说明']}}
-								<template v-if="index!=(columns.length-1)">&</template>
-							</template>&index=1&size=5
+							http://127.0.0.1:3000/{{tableName}}/page?<template v-for="(item,index) in columns">{{item['字段名']}}={{item['说明']}}<template v-if="index!=(columns.length-1)">&</template></template>&index=1&size=5
 						</div>
 						<h4>返回参数说明</h4>
 						<table class="table">
@@ -1881,7 +1914,7 @@ fetch('http://127.0.0.1:3000/{{tableName}}/top', {
 							</tr>
 						</table>
 						<h4>返回结果示例</h4>
-						<p>JSON对象</p>
+						<p>JSON对象，成功code为0，失败code为-1，异常code为其他数</p>
 						<div class="gary">
 							<pre>
 {
