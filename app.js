@@ -31,6 +31,7 @@ app.use("/", indexRouter);
 app.use("/jade", jadeRouter);
 //pintuer Api 示例
 app.use("/example", example);
+
 //API帮助文档路由
 app.use("/api", apiRouter);
 app.use("/help", express.static(__dirname + "/public/docs/api.html"));
