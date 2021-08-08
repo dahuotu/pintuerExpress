@@ -20,7 +20,9 @@
 		<title>Node单表代码生成工具</title>
 		<link rel="stylesheet" href="../stylesheets/style.css" />
 		<script type="text/javascript" src="../javascripts/flexible.min.js"></script>
-		<style type="text/css"></style>
+		<style type="text/css">
+
+		</style>
 	</head>
 
 	<body>
@@ -29,83 +31,533 @@
 				<div class="nav-title">
 					Node单表代码生成工具
 				</div>
+				<div class="nav-select">
+					<select @change="select_database">
+						<option value="">--请选择数据库--</option>
+						<template v-for="(item,index) in database">
+							<option :value="item.Database">{{item.Database}}</option>
+						</template>
+					</select>
+					<select v-if="databaseName!=''" v-model="tableName" @change="select_table">
+						<option v-for="(item,index) in table" :value="item.name">{{item.name}}</option>
+					</select>
+				</div>
 				<ul>
-					<li>
+					<li v-if="databaseName!=''">
 						<a href="#confdb">生成 conf/db.js代码</a>
 					</li>
-					<li>
-						<a href="#app">生成 app.js入口路由代码</a>
+					<li v-if="tableName!=''">
+						<a href="#appjs">生成 app.js入口路由代码</a>
 					</li>
-					<li>
+					<li v-if="tableName!=''">
+						<a href="#routesjs">生成 routes/{{tableName}}.js代码</a>
+					</li>
+					<li v-if="tableName!=''">
 						<a href="#sqlMapping">生成 dao/sqlMapping.js代码</a>
 					</li>
-					<li>
+					<li v-if="tableName!=''">
 						<a href="#dao">生成 dao/dao.js代码</a>
 					</li>
 				</ul>
 			</nav>
 			<article>
-				<h2>Node单表代码生成工具</h2>
+				<h2>生成表{{tableName}}调用代码</h2>
 				<div class="code">
-					<section id="confdb">
+					<section id="confdb" v-if="databaseName!=''">
 						<strong>生成 conf/db.js 代码</strong>
 						<p>MySql数据库连接配置</p>
 						<div>
-							<pre>
+							<pre id="confdb_copy">
 /**
  * 整个node站点MySql数据库连接配置串
  * 存储在大火兔提供的node框架conf文件夹下，只要替换db.js或者复制以上连接串找到db.js内即可
  */
 module.exports = {
 	mysql: {
-		host: '127.0.0.1', 	//数据主机地址
-		user: 'root',	   	//数据库用户名
-		password: '',		//数据库密码
-		database:'dahuotu',	//数据库名称
-		port: 3306 		//端口号
+		host: '{{connection.host}}', 	//数据主机地址
+		user: '{{connection.user}}',	   	//数据库用户名
+		password: '{{connection.password}}',		//数据库密码
+		database:'{{databaseName}}',	//数据库名称
+		port: {{connection.port}} 		//端口号
 	}
 };
-			                    </pre>
+			                </pre>
 						</div>
 					</section>
-					<section id="app">
+					<section id="appjs" v-if="tableName!=''">
 						<strong>生成 app.js 入口路由代码</strong>
 						<p>生成app.js 入口业务模块路由代码</p>
+						<h4>说明</h4>
 						<div>
-							<pre>
-//放在 示例路由代码下面
+							<samp>
+//放在示例路由代码下面<br /> 
 //var example = require("./routes/example");
-//example路由
-var example = require("./routes/example");
-
-//放在 pintuer Api 示例代码下面
+							</samp>
+						</div>
+						<h4>调用</h4>
+						<div>
+							<pre>
+//{{tableName}}路由
+var {{tableName}} = require("./routes/{{tableName}}");
+			                </pre>
+						</div>
+						<h4>
+							说明
+						</h4>
+						<div>
+							<samp>
+//放在 pintuer Api 示例代码下面<br /> 
 //app.use("/example", example);
-//example 示例
-app.use("/example", example);
+							</samp>
+						</div>
+						<h4>
+							调用
+						</h4>
+						<div>
+							<pre>
+//{{tableName}} 示例
+app.use("/{{tableName}}", {{tableName}});
 			                </pre>
 						</div>
 					</section>
-					<section id="sqlMapping">
-						<strong>生成 dao/sqlMapping.js SQL语句代码</strong>
-						<p>生成app.js 入口业务模块路由代码</p>
+					<section id="sqlMapping" v-if="tableName!=''">
+						<strong>生成 dao/{{tableName}}/sqlMapping.js</strong>
+						<p>生成 dao/{{tableName}}/sqlMapping.js SQL语句代码</p>
 						<div>
-							<pre>
-								
+							<pre id="sqlMapping_copy">
+/*
+{{tableName}}:CRUD SQL语句
+路径:dao/{{tableName}}/sqlMapping.js
+*/
+
+var {{tableName}} = {
+	//新增一条记录，对应路由:add
+	insert: 'INSERT INTO {{tableName}}(<template v-for="(item,index) in columns">{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>) VALUES (<template v-for="(item,index) in columns">?<template v-if="index!=(columns.length-1)">,</template></template>)',
+	//删除一条记录，对应路由:del
+	delete: 'DELETE FROM {{tableName}} WHERE <template v-for="(item,index) in keys">{{item['字段名']}}=?<template v-if="index!=(keys.length-1)">,</template></template>',
+	//删除指定条件的多条记录，对应路由:delete
+	deleteByWhere: 'DELETE FROM {{tableName}} WHERE 1=1<template v-for="(item,index) in columns"> AND {{item['字段名']}}=?<template v-if="index!=(columns.length-1)"></template></template>',
+	//更新一条记录，对应路由:edit
+	edit: 'UPDATE {{tableName}} SET<template v-for="(item,index) in columns"> {{item['字段名']}}=?<template v-if="index!=(columns.length-1)">,</template></template> WHERE <template v-for="(item,index) in keys">{{item['字段名']}}=?<template v-if="index!=(keys.length-1)">,</template></template>',
+	//更新指定条件的记录，对应路由:update
+	updateByWhere: 'UPDATE {{tableName}} SET<template v-for="(item,index) in columns"> {{item['字段名']}}=?<template v-if="index!=(columns.length-1)">,</template></template> WHERE 1=1<template v-for="(item,index) in columns"> AND {{item['字段名']}}=?<template v-if="index!=(columns.length-1)"></template></template>',
+	//查询一条记录的详情，对应路由:id
+	queryById: 'SELECT * FROM {{tableName}} WHERE <template v-for="(item,index) in keys">{{item['字段名']}}=?<template v-if="index!=(keys.length-1)">,</template></template>',
+	//查询指定条件的记录，对应路由:query
+	queryByWhere: 'SELECT * FROM {{tableName}} WHERE 1=1<template v-for="(item,index) in columns"> AND {{item['字段名']}}=?<template v-if="index!=(columns.length-1)"></template></template>',
+	//查询所有记录，对应路由:list
+	queryAll: 'SELECT * FROM {{tableName}}',
+	//查询置顶记录，对应路由:top
+	queryTop: 'SELECT * FROM {{tableName}} LIMIT ?',
+	//查询指定条件的分页记录，对应路由:page
+	queryPage: 'SELECT * FROM {{tableName}} WHERE 1=1<template v-for="(item,index) in columns"> AND {{item['字段名']}}=?<template v-if="index!=(columns.length-1)"></template></template> LIMIT ?,?'
+};
+
+module.exports = {{tableName}};
 			                </pre>
 						</div>
 					</section>
-					<section id="dao">
-						<strong>生成 dao/dao.js 逻辑代码</strong>
-						<p>生成app.js 入口业务模块路由代码</p>
+					<section id="routesjs" v-if="tableName!=''">
+						<strong>生成 routes/{{tableName}}.js</strong>
+						<p>生成 routes/{{tableName}}.js 路由代码</p>
 						<div>
-							<pre>
-								
+							<pre id="routesjs_copy">
+var express = require('express');
+var router = express.Router();
+var $dao = require('../dao/{{tableName}}/dao');
+
+/* 
+GET {{tableName}} listing.
+路由路径 routes/{{tableName}}.js
+*/
+router.get('/', function (req, res, next) {
+	res.json({
+		code: '0',
+		msg: 'sucess',
+		data: ''
+	});
+});
+
+//新增一条记录，对应路由:add
+router.post('/add', function (req, res, next) {
+	$dao.add(req, res, next);
+});
+//删除一条记录，对应路由:del
+router.post('/del', function (req, res, next) {
+	$dao.delete(req, res, next);
+});
+//删除指定条件的多条记录，对应路由:delete
+router.post('/delete', function (req, res, next) {
+	$dao.deleteByWhere(req, res, next);
+});
+//更新一条记录，对应路由:edit
+router.post('/edit', function (req, res, next) {
+	$dao.update(req, res, next);
+});
+//更新指定条件的记录，对应路由:update
+router.post('/update', function (req, res, next) {
+	$dao.updateByWhere(req, res, next);
+});
+//查询一条记录的详情，对应路由:id
+router.get('/id', function (req, res, next) {
+	$dao.queryById(req, res, next);
+});
+//查询指定条件的记录，对应路由:query
+router.get('/query', function (req, res, next) {
+	$dao.queryByWhere(req, res, next);
+});
+//查询所有记录，对应路由:list
+router.get('/list', function (req, res, next) {
+	$dao.queryAll(req, res, next);
+});
+//查询置顶记录，对应路由:top
+router.get('/top', function (req, res, next) {
+	$dao.queryTop(req, res, next);
+});
+//查询指定条件的分页记录，对应路由:page
+router.get('/page', function (req, res, next) {
+	$dao.queryPage(req, res, next);
+});
+
+
+/*
+自定义路由，自行增加
+*/
+
+module.exports = router;
+			                </pre>
+						</div>
+					</section>
+					<section id="dao" v-if="tableName!=''">
+						<strong>生成 dao/{{tableName}}/dao.js</strong>
+						<p>生成 dao/{{tableName}}/dao.js 逻辑代码</p>
+						<div>
+							<pre id="dao_copy">
+/*
+说明:实现与MySQL交互
+方式:Api方式
+路径:dao/{{tableName}}/dao.js
+*/
+
+var $mysql = require('mysql');
+var $conf = require('../../conf/db');
+var $util = require('../../util/util');
+var $sql = require('./sqlMapping');
+
+// 使用连接池，提升性能
+var pool = $mysql.createPool($util.extend({}, $conf.mysql));
+
+module.exports = {
+	add: function (req, res, next) {
+		//Post方式新增,对应路由 add
+		var param = req.query;
+		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.insert, [<template v-for="(item,index) in columns">param.{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>], function (err2, result) {
+				if (result.affectedRows > 0) {
+					result = {
+						code: 0,
+						msg: '新增成功',
+						data: []
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '新增失败:' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	delete: function (req, res, next) {
+		//通过ID删除,对应路由 del
+		var param = req.query;
+		if (<template v-for="(item,index) in keys">param.{{item['字段名']}}==null<template v-if="index!=(keys.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.delete, [<template v-for="(item,index) in keys">param.{{item['字段名']}}<template v-if="index!=(keys.length-1)">,</template></template>], function (err2, result) {
+				if (result.affectedRows > 0) {
+					result = {
+						code: 0,
+						msg: '删除成功',
+						data: []
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '删除失败:' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	deleteByWhere: function (req, res, next) {
+		//通过指定条件删除,对应路由 delete
+		var param = req.query;
+		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.deleteByWhere, [<template v-for="(item,index) in columns">param.{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>], function (err2, result) {
+				if (result.affectedRows > 0) {
+					result = {
+						code: 0,
+						msg: '删除成功',
+						data: []
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '删除失败:' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	update: function (req, res, next) {
+		//通过ID更新,对应路由 edit
+		var param = req.query;
+		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template><template v-for="(item,index) in keys"> || param.{{item['字段名']}}==null<template v-if="index!=(keys.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.edit, [<template v-for="(item,index) in columns">param.{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template><template v-for="(item,index) in keys">,param.{{item['字段名']}}<template v-if="index!=(keys.length-1)">,</template></template>], function (err2, result) {
+				if (result.affectedRows > 0) {
+					result = {
+						code: 0,
+						msg: '修改成功',
+						data: []
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '修改失败:' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	updateByWhere: function (req, res, next) {
+		//通过指定条件更新,对应路由 update
+		var param = req.query;
+		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null ||<template v-if="index!=(columns.length-1)"></template></template><template v-for="(item,index) in columns"> param.que{{item['字段名']}}==null<template v-if="index!=(columns.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.updateByWhere, [<template v-for="(item,index) in columns">param.{{item['字段名']}},<template v-if="index!=(columns.length-1)"></template></template><template v-for="(item,index) in columns">param.que{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>], function (err2, result) {
+				if (result.affectedRows > 0) {
+					result = {
+						code: 0,
+						msg: '修改成功',
+						data: []
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '修改失败' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	queryById: function (req, res, next) {
+		//通过ID查询详情,对应路由id
+		var param = req.query;
+		if (<template v-for="(item,index) in keys">param.{{item['字段名']}}==null<template v-if="index!=(keys.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryById, [<template v-for="(item,index) in keys">param.{{item['字段名']}}<template v-if="index!=(keys.length-1)">,</template></template>], function (err2, result) {
+				if (result != null) {
+					result = {
+						code: 0,
+						msg: '查询成功',
+						data: result
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '查询失败' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	queryByWhere: function (req, res, next) {
+		//通过指定条件查询列表,对应路由query
+		var param = req.query;
+		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template>) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryByWhere, [<template v-for="(item,index) in columns">param.{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>], function (err2, result) {
+				if (result != null) {
+					result = {
+						code: 0,
+						msg: '查询成功',
+						data: result
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '查询失败' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	queryAll: function (req, res, next) {
+		//查询所有列表,对应路由list
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryAll, function (err2, result) {
+				if (result != null) {
+					result = {
+						code: 0,
+						msg: '查询成功',
+						data: result
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '查询失败' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	queryTop: function (req, res, next) {
+		//查询前多少条记录,对应路由top
+		var param = req.query;
+		if (param.top == null) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryTop, [Number(param.top)], function (err2, result) {
+				if (result != null) {
+					result = {
+						code: 0,
+						msg: '查询成功',
+						data: result
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '查询失败' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+	queryPage: function (req, res, next) {
+		//通过指定条件查询分页列表,对应路由page
+		var param = req.query;
+		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template> || param.index == null || param.size == null) {
+			result = {
+				code: -1,
+				msg: '参数错误'
+			};
+			$util.jsonMsg(res, result);
+			return;
+		}
+		pool.getConnection(function (err, connection) {
+			var beign = (Number(param.index) - 1) * Number(param.size);
+			var end = Number(param.index) * Number(param.size);
+			connection.query($sql.queryPage, [<template v-for="(item,index) in columns">param.{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>, beign, end], function (err2, result) {
+				if (result != null) {
+					result = {
+						code: 0,
+						msg: '查询成功',
+						data: result
+					};
+				} else {
+					result = {
+						code: -1,
+						msg: '查询失败' + err2,
+						data: []
+					};
+				}
+				$util.jsonMsg(res, result);
+				connection.release();
+			});
+		});
+	},
+};								
 			                </pre>
 						</div>
 					</section>
 				</div>
-				<div class="mads" onclick="location.href='https://www.dahuotu.com/'">
-					作者：大火兔
+				<div class="mads">
+					作者：<a href="https://www.dahuotu.com/" target="_blank">大火兔</a>
 				</div>
 			</article>
 		</div>
@@ -116,27 +568,124 @@ app.use("/example", example);
 		var vm = new Vue({
 			el: '#app',
 			data: {
-
+				connection: [],
+				database: [],
+				databaseName: '',
+				table: [],
+				tableName: '',
+				column: [],
+				keys: [],
+				columns: []
 			},
 			mounted() {
 				var that = this;
+				this.load_database();
 			},
 			methods: {
-				conf_dbjs_code() {
-					//生成 conf/db.js MySql数据库连接配置
-
+				load_database() {
+					//查询所有数据
+					axios.get('/api/config', {
+							params: {
+								type: 'database'
+							}
+						})
+						.then(function(response) {
+							if(response.data.code == 0) {
+								vm.database = response.data.data;
+							}
+						})
+						.catch(function(error) {
+							console.log(error);
+						})
+						.then(function() {
+							// 总是会执行
+						});
 				},
-				appjs_code() {
-					//生成 app.js入口路由代码
-
+				select_database(e) {
+					//选中数据库
+					vm.databaseName = e.target.value;
+					vm.load_connection();
+					vm.load_tables(e.target.value);
 				},
-				dao_sqlmappingjs_code() {
-					//生成 dao/表名/sqlMapping.js代码
-
+				load_connection() {
+					//查询连接配置
+					axios.get('/api/connection', {
+							params: {}
+						})
+						.then(function(response) {
+							if(response.data.code == 0) {
+								vm.connection = response.data.data[0];
+							}
+						})
+						.catch(function(error) {
+							console.log(error);
+						})
+						.then(function() {
+							// 总是会执行
+						});
 				},
-				dao_daojs_code() {
-					//生成 dao/表名/dao.js代码
-
+				load_tables(e) {
+					//查询库下的所有表
+					axios.get('/api/config', {
+							params: {
+								type: 'table',
+								database: e
+							}
+						})
+						.then(function(response) {
+							if(response.data.code == 0) {
+								vm.table = response.data.data;
+							}
+						})
+						.catch(function(error) {
+							console.log(error);
+						})
+						.then(function() {
+							// 总是会执行
+						});
+				},
+				select_table(e) {
+					vm.tableName = e.target.value;
+					vm.load_column(e.target.value);
+				},
+				load_column(e) {
+					//获取选中表的所有字段
+					axios.get('/api/config', {
+							params: {
+								type: 'column',
+								database: vm.databaseName,
+								table: e
+							}
+						})
+						.then(function(response) {
+							if(response.data.code == 0) {
+								vm.column = response.data.data;
+								vm.filter_keys(response.data.data);
+								vm.filter_columns(response.data.data);
+							}
+						})
+						.catch(function(error) {
+							console.log(error);
+						})
+						.then(function() {
+							// 总是会执行
+						});
+				},
+				filter_keys(e) {
+					//过滤主键
+					let arr = e;
+					let newArr = arr.filter((item, i, arr) => {
+						return item['约束'] == 'PRI'
+					})
+					vm.keys = newArr;
+				},
+				filter_columns(e) {
+					//过滤非主键字段
+					let arr = e;
+					let newArr = arr.filter((item, i, arr) => {
+						return item['约束'] != 'PRI'
+					})
+					vm.columns = newArr;
 				},
 			},
 		});

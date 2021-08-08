@@ -13,14 +13,21 @@ router.get('/', function (req, res, next) {
 		data: ''
 	});
 });
-
+//connection
+router.get('/connection', function (req, res, next) {
+	$dao.queryConnection(req, res, next);
+});
+//database
+router.get('/config', function (req, res, next) {
+	$dao.queryConfig(req, res, next);
+});
 //table
-router.get('/table', function (req, res, next) {
-	$dao.queryTable(req, res, next);
+router.get('/config', function (req, res, next) {
+	$dao.queryConfig(req, res, next);
 });
 //column
-router.get('/column', function (req, res, next) {
-	$dao.queryColumn(req, res, next);
+router.get('/config', function (req, res, next) {
+	$dao.queryConfig(req, res, next);
 });
 
 module.exports = router;
