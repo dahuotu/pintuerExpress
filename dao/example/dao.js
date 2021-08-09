@@ -46,7 +46,7 @@ module.exports = {
 	},
 	delete: function (req, res, next) {
 		//通过ID删除,对应路由 del
-		var param = req.query;
+		var param = req.body;
 		if (param.id == null) {
 			result = {
 				code: -1,
@@ -77,7 +77,7 @@ module.exports = {
 	},
 	deleteByWhere: function (req, res, next) {
 		//通过指定条件删除,对应路由 delete
-		var param = req.query;
+		var param = req.body;
 		if (param.title == null || param.content == null) {
 			result = {
 				code: -1,
@@ -108,7 +108,7 @@ module.exports = {
 	},
 	update: function (req, res, next) {
 		//通过ID更新,对应路由 edit
-		var param = req.query;
+		var param = req.body;
 		if (param.title == null || param.content == null || param.id == null) {
 			result = {
 				code: -1,
@@ -139,7 +139,7 @@ module.exports = {
 	},
 	updateByWhere: function (req, res, next) {
 		//通过指定条件更新,对应路由 update
-		var param = req.query;
+		var param = req.body;
 		if (param.title == null || param.content == null || param.quetitle == null || param.quecontent == null) {
 			result = {
 				code: -1,
