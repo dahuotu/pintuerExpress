@@ -1,5 +1,6 @@
 var createError = require("http-errors");
 var express = require("express");
+var cors = require('cors');
 var path = require("path");
 var favicon = require('serve-favicon');
 var cookieParser = require("cookie-parser");
@@ -14,6 +15,7 @@ var apiRouter = require("./routes/api");
 var example = require("./routes/example");
 
 var app = express();
+app.use(cors());
 // 视图模板引擎设置，此框架只支持Ejs
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -29,7 +31,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 //express jade示例
 app.use("/jade", jadeRouter);
-//pintuer Api 示例
+//pintuer Api示例
 app.use("/example", example);
 
 //API帮助文档路由

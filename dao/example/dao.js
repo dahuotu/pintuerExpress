@@ -15,7 +15,7 @@ var pool = $mysql.createPool($util.extend({}, $conf.mysql));
 module.exports = {
 	add: function (req, res, next) {
 		//Post方式新增,对应路由 add
-		var param = req.query;
+		var param = req.body;
 		if (param.title == null || param.content == null) {
 			result = {
 				code: -1,

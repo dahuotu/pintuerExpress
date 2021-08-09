@@ -110,7 +110,7 @@ var {{tableName}} = require("./routes/{{tableName}}");
 						<h4>代码</h4>
 						<div class="gary">
 							<pre>
-//{{tableName}} 示例
+//{{tableName}}
 app.use("/{{tableName}}", {{tableName}});
 			                </pre>
 						</div>
@@ -247,7 +247,7 @@ var pool = $mysql.createPool($util.extend({}, $conf.mysql));
 module.exports = {
 	add: function (req, res, next) {
 		//Post方式新增,对应路由 add
-		var param = req.query;
+		var param = req.body;
 		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template>) {
 			result = {
 				code: -1,
@@ -278,7 +278,7 @@ module.exports = {
 	},
 	delete: function (req, res, next) {
 		//通过ID删除,对应路由 del
-		var param = req.query;
+		var param = req.body;
 		if (<template v-for="(item,index) in keys">param.{{item['字段名']}}==null<template v-if="index!=(keys.length-1)">||</template></template>) {
 			result = {
 				code: -1,
@@ -309,7 +309,7 @@ module.exports = {
 	},
 	deleteByWhere: function (req, res, next) {
 		//通过指定条件删除,对应路由 delete
-		var param = req.query;
+		var param = req.body;
 		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template>) {
 			result = {
 				code: -1,
@@ -340,7 +340,7 @@ module.exports = {
 	},
 	update: function (req, res, next) {
 		//通过ID更新,对应路由 edit
-		var param = req.query;
+		var param = req.body;
 		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template><template v-for="(item,index) in keys"> || param.{{item['字段名']}}==null<template v-if="index!=(keys.length-1)">||</template></template>) {
 			result = {
 				code: -1,
@@ -371,7 +371,7 @@ module.exports = {
 	},
 	updateByWhere: function (req, res, next) {
 		//通过指定条件更新,对应路由 update
-		var param = req.query;
+		var param = req.body;
 		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null ||<template v-if="index!=(columns.length-1)"></template></template><template v-for="(item,index) in columns"> param.que{{item['字段名']}}==null<template v-if="index!=(columns.length-1)">||</template></template>) {
 			result = {
 				code: -1,
