@@ -1,69 +1,69 @@
 * {
-	margin: 0;
-	padding: 0;
-	outline: none;
+  margin: 0;
+  padding: 0;
+  outline: none;
 }
 
 *:not(input, textarea) {
-	-webkit-touch-callout: inherit;
-	-webkit-user-select: auto;
+  -webkit-touch-callout: inherit;
+  -webkit-user-select: auto;
 }
 
 body {
-	width: 100%;
-	font-family: Hiragino Sans GB, Arial, Helvetica, "微软雅黑", sans-serif;
-	font-size: 14px;
-	color: #333;
-	-webkit-touch-callout: inherit;
-	-webkit-user-select: auto;
-	background-color: #f5f5f5;
+  width: 100%;
+  font-family: Hiragino Sans GB, Arial, Helvetica, "微软雅黑", sans-serif;
+  font-size: 14px;
+  color: #333;
+  -webkit-touch-callout: inherit;
+  -webkit-user-select: auto;
+  background-color: #f5f5f5;
 }
 
 a {
-	color: #878787;
-	text-decoration: none;
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: #878787;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 a:hover {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 button,
 input,
 select,
 textarea {
-	margin: 0;
-	padding: 0;
-	outline: none;
+  margin: 0;
+  padding: 0;
+  outline: none;
 }
 
 dt,
 dd {
-	margin: 0;
-	padding: 0;
-	outline: none;
+  margin: 0;
+  padding: 0;
+  outline: none;
 }
 
 textarea,
 input {
-	resize: none;
-	outline: none;
+  resize: none;
+  outline: none;
 }
 
 textarea {
-	resize: none;
-	-webkit-appearance: none;
+  resize: none;
+  -webkit-appearance: none;
 }
 
 ul,
 ol,
 li {
-	list-style: none;
+  list-style: none;
 }
 
 em {
-	font-style: normal;
+  font-style: normal;
 }
 
 button,
@@ -72,333 +72,356 @@ textarea,
 html input[type="button"],
 input[type="reset"],
 input[type="submit"] {
-	-webkit-appearance: button;
-	cursor: pointer;
+  -webkit-appearance: button;
+  cursor: pointer;
 }
 
 .img-responsive {
-	display: block;
-	max-width: 100%;
-	height: auto;
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .hide {
-	display: none;
+  display: none;
 }
 
 .show {
-	display: block;
+  display: block;
+}
+
+.layer {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.alert {
+  width: 3rem;
+  height: 0.5rem;
+  background: #000;
+  z-index: 9;
+  font-size: 0.18rem;
+  border-radius: 0.04rem;
+  color: #eee;
+  text-align: center;
+  line-height: 0.5rem;
 }
 
 nav {
-	width: 3.5rem;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 3.5rem;
-	bottom: 0;
-	display: none;
-	box-shadow: 0 -0.02rem 0.04rem 0 #dbdbdb;
-	background: #ffffff;
+  width: 3.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 3.5rem;
+  bottom: 0;
+  display: none;
+  box-shadow: 0 -0.02rem 0.04rem 0 #dbdbdb;
+  background: #ffffff;
 }
 
-@media screen and (min-width:768px) {
-	nav {
-		display: block;
-	}
+@media screen and (min-width: 768px) {
+  nav {
+    display: block;
+  }
 }
 
 nav .nav-title {
-	height: 0.6rem;
-	line-height: 0.6rem;
-	background: #f5f5f5;
-	text-align: center;
-	font-size: 0.28rem;
-	margin: 0.2rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  background: #f5f5f5;
+  text-align: center;
+  font-size: 0.28rem;
+  margin: 0.2rem;
 }
 
 nav .nav-select {
-	text-align: center;
-	height: 0.3rem;
-	line-height: 0.3rem;
-	font-size: 0.2rem;
+  text-align: center;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  font-size: 0.2rem;
 }
 
 nav .nav-select select {
-	height: 0.3rem;
+  height: 0.3rem;
 }
 
 nav ul {
-	padding: 0.2rem;
+  padding: 0.2rem;
 }
 
 nav ul li {
-	height: 0.6rem;
-	line-height: 0.6rem;
-	padding: 0 0.2rem;
-	font-size: 0.20rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  padding: 0 0.2rem;
+  font-size: 0.2rem;
 }
 
 nav ul li:hover {
-	padding: 0 0.1rem;
-	font-weight: bold;
-	background: #f5f5f5;
-	border-radius: 0.05rem;
-	color: #333333;
+  padding: 0 0.1rem;
+  font-weight: bold;
+  background: #f5f5f5;
+  border-radius: 0.05rem;
+  color: #333333;
 }
 
 nav ul li .active {
-	padding: 0 0.1rem;
-	font-weight: bold;
-	background: #f5f5f5;
-	border-radius: 0.05rem;
-	color: #333333;
+  padding: 0 0.1rem;
+  font-weight: bold;
+  background: #f5f5f5;
+  border-radius: 0.05rem;
+  color: #333333;
 }
 
 article {
-	background: rgba(255, 255, 255, 1);
-	box-shadow: 0 -0.02rem 0.04rem 0 rgba(219, 219, 219, 0.5);
-	margin: 0.3rem;
-	padding: 0.2rem;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 -0.02rem 0.04rem 0 rgba(219, 219, 219, 0.5);
+  margin: 0.3rem;
+  padding: 0.2rem;
 }
 
-@media screen and (min-width:768px) {
-	article {
-		margin-left: 4rem;
-	}
+@media screen and (min-width: 768px) {
+  article {
+    margin-left: 4rem;
+  }
 }
 
 article h2 {
-	text-align: center;
-	font-size: 0.28rem;
-	margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.28rem;
+  margin-top: 0.5rem;
 }
 
 article .code {
-	padding: 0;
+  padding: 0;
 }
 
 section {
-	padding: 0.2rem;
+  padding: 0.2rem;
 }
 
 section strong {
-	padding: 0.2rem 0;
-	font-size: 0.24rem;
+  padding: 0.2rem 0;
+  font-size: 0.24rem;
 }
 
 section p {
-	margin: 0.2rem;
-	font-size: 0.16rem;
-	font-weight: 500;
+  margin: 0.2rem;
+  font-size: 0.16rem;
+  font-weight: 500;
 }
 
 section .gary {
-	padding: 0.2rem;
-	font-size: 0.20rem;
-	overflow: auto;
-	background-color: #f6f8fa;
-	border-radius: 0.03rem;
-	border: none;
-	text-align: left;
-	width: auto;
-	margin: 0.2rem 0;
+  padding: 0.2rem;
+  font-size: 0.2rem;
+  overflow: auto;
+  background-color: #f6f8fa;
+  border-radius: 0.03rem;
+  border: none;
+  text-align: left;
+  width: auto;
+  margin: 0.2rem 0;
 }
 
 section pre {
-	font-size: 0.16rem;
-	overflow: auto;
-	background-color: #f6f8fa;
-	border-radius: 0.06rem;
-	border: none;
-	text-align: left;
-	width: 100%;
-	min-height: auto;
-	height: auto;
+  font-size: 0.16rem;
+  overflow: auto;
+  background-color: #f6f8fa;
+  border-radius: 0.06rem;
+  border: none;
+  text-align: left;
+  width: 100%;
+  min-height: auto;
+  height: auto;
 }
 
 section samp {
-	font-size: 0.16rem;
-	overflow: auto;
-	background-color: #fafafa;
-	border-radius: 0.03rem;
-	border: none;
-	text-align: left;
-	color: #999;
+  font-size: 0.16rem;
+  overflow: auto;
+  background-color: #fafafa;
+  border-radius: 0.03rem;
+  border: none;
+  text-align: left;
+  color: #999;
 }
 
 section .gary ul {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 section .gary ul li {
-	height: auto;
-	display: flex;
+  height: auto;
+  display: flex;
 }
 
 section .gary ul li .key {
-	text-align: left;
-	padding: 0 0.05rem;
-	margin: 0;
-	font-weight: bold;
+  text-align: left;
+  padding: 0 0.05rem;
+  margin: 0;
+  font-weight: bold;
 }
 
 section div ul li .line {
-	text-align: left;
-	padding: 0 0.05rem;
-	margin: 0;
-	font-weight: bold;
+  text-align: left;
+  padding: 0 0.05rem;
+  margin: 0;
+  font-weight: bold;
 }
 
 section .gary ul li .value {
-	text-align: left;
-	padding: 0 0.05rem;
-	margin: 0;
+  text-align: left;
+  padding: 0 0.05rem;
+  margin: 0;
 }
 
 h4 {
-	margin: 0.1rem 0;
-	font-size: 0.16rem;
+  margin: 0.1rem 0;
+  font-size: 0.16rem;
 }
 
 .mads {
-	height: 1rem;
-	line-height: 1rem;
-	text-align: center;
-	font-size: 0.28rem;
+  height: 1rem;
+  line-height: 1rem;
+  text-align: center;
+  font-size: 0.28rem;
 }
 
 .btncopy {
-	width: 0.6rem;
-	height: auto;
-	background: #000;
-	color: #fff;
-	float: right;
-	text-align: center;
-	font-size: 0.18rem;
-	padding: 0;
-	overflow: hidden;
-	border-radius: 0.02rem;
-	border: none;
-	cursor: default;
+  width: 0.6rem;
+  height: auto;
+  background: #000;
+  color: #fff;
+  float: right;
+  text-align: center;
+  font-size: 0.18rem;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.02rem;
+  border: none;
+  cursor: default;
 }
 
 .table {
-	width: 50%;
-	max-width: 50%;
-	border-collapse: separate;
-	border-spacing: 0;
-	border: 1px solid #ddd;
-	margin: 0.2rem;
+  width: 50%;
+  max-width: 50%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  margin: 0.2rem;
 }
 
 .table th {
-	border-top: 0;
-	border-bottom-width: 1px;
-	vertical-align: middle;
+  border-top: 0;
+  border-bottom-width: 1px;
+  vertical-align: middle;
 }
 
 .table th,
 .table td {
-	border-top: 1px solid #ddd;
-	padding: .1rem;
-	border-right: 1px solid #ddd;
-	text-align: center;
+  border-top: 1px solid #ddd;
+  padding: 0.1rem;
+  border-right: 1px solid #ddd;
+  text-align: center;
 }
 
 .tabs {
-	margin: 0;
-	padding: 0;
-	height: 3.9rem;
+  margin: 0;
+  padding: 0;
+  height: 3.9rem;
 }
 
 .tabs ul {
-	position: relative;
-	width: auto;
-	margin: 0.2rem auto;
+  position: relative;
+  width: auto;
+  margin: 0.2rem auto;
 }
 
 .tabs ul li {
-	list-style: none;
+  list-style: none;
 }
 
 .tabs ul li input {
-	display: none;
+  display: none;
 }
 
 .tabs ul li label {
-	float: left;
-	width: 100px;
-	text-align: center;
-	line-height: 30px;
-	border: 1px solid #f6f8fa;
-	border-right: 0;
-	box-sizing: border-box;
-	cursor: pointer;
-	transition: all .3s;
+  float: left;
+  width: 100px;
+  text-align: center;
+  line-height: 30px;
+  border: 1px solid #f6f8fa;
+  border-right: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.tabs ul li input:checked+label {
-	color: #333;
-	background-color: #f6f8fa;
+.tabs ul li input:checked + label {
+  color: #333;
+  background-color: #f6f8fa;
 }
 
 .tabs ul li:last-child label {
-	border-right: 1px solid #f6f8fa;
+  border-right: 1px solid #f6f8fa;
 }
 
 .tabs ul li .content {
-	opacity: 0;
-	visibility: hidden;
-	position: absolute;
-	left: 0;
-	top: 0.3rem;
-	width: 100%;
-	border: 1px solid #f6f8fa;
-	box-sizing: border-box;
-	text-align: center;
-	color: #333;
-	transition: all .3s;
-	height: 3.5rem;
-	padding: 0.2rem;
-	overflow: auto;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 0.3rem;
+  width: 100%;
+  border: 1px solid #f6f8fa;
+  box-sizing: border-box;
+  text-align: center;
+  color: #333;
+  transition: all 0.3s;
+  height: 3.5rem;
+  padding: 0.2rem;
+  overflow: auto;
 }
 
 .tabs ul li:nth-child(1) .content {
-	background-color: #f6f8fa;
+  background-color: #f6f8fa;
 }
 
 .tabs ul li:nth-child(2) .content {
-	background-color: #f6f8fa;
+  background-color: #f6f8fa;
 }
 
 .tabs ul li:nth-child(3) .content {
-	background-color: #f6f8fa;
+  background-color: #f6f8fa;
 }
 
 .tabs ul li:nth-child(4) .content {
-	background-color: #f6f8fa;
+  background-color: #f6f8fa;
 }
 
-.tabs ul li input:checked~.content {
-	opacity: 1;
-	visibility: visible;
+.tabs ul li input:checked ~ .content {
+  opacity: 1;
+  visibility: visible;
 }
 
 .clear {
-	clear: both;
+  clear: both;
 }
 
 .json {
-	padding: 0;
-	margin: 0;
-	line-height: 0;
-	list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  list-style: none;
 }
-.json .li{
-	
-	height: 0.2rem;
-	line-height: 0.2rem;
-	display: block;
+.json .li {
+  height: 0.2rem;
+  line-height: 0.2rem;
+  display: block;
 }

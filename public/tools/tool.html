@@ -1,72 +1,87 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+      name="viewport"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="full-screen" content="yes" />
+    <meta name="x5-orientation" content="portrait" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta content="dahuotu" name="author" />
+    <title>Node单表代码生成工具</title>
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+    <script
+      type="text/javascript"
+      src="../javascripts/flexible.min.js"
+    ></script>
+    <style type="text/css"></style>
+  </head>
 
-	<head>
-		<meta charset="utf-8">
-		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="renderer" content="webkit">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="format-detection" content="telephone=no, email=no" />
-		<meta name="screen-orientation" content="portrait">
-		<meta name="full-screen" content="yes">
-		<meta name="x5-orientation" content="portrait">
-		<meta name="x5-fullscreen" content="true">
-		<meta name="msapplication-tap-highlight" content="no">
-		<meta name="keywords" content="" />
-		<meta name="description" content="" />
-		<meta content="dahuotu" name="author" />
-		<title>Node单表代码生成工具</title>
-		<link rel="stylesheet" href="../stylesheets/style.css" />
-		<script type="text/javascript" src="../javascripts/flexible.min.js"></script>
-		<style type="text/css"></style>
-	</head>
-
-	<body>
-		<div id="app">
-			<nav>
-				<div class="nav-title">
-					Node单表代码生成工具
-				</div>
-				<div class="nav-select">
-					<select @change="select_database">
-						<option value="">--请选择数据库--</option>
-						<template v-for="(item,index) in database">
-							<option :value="item.Database">{{item.Database}}</option>
-						</template>
-					</select>
-					<select v-if="databaseName!=''" v-model="tableName" @change="select_table">
-						<option v-for="(item,index) in table" :value="item.name">{{item.name}}</option>
-					</select>
-				</div>
-				<ul>
-					<li v-if="databaseName!=''">
-						<a href="#confdb">生成 conf/db.js代码</a>
-					</li>
-					<li v-if="tableName!=''">
-						<a href="#appjs">生成 app.js入口路由代码</a>
-					</li>
-					<li v-if="tableName!=''">
-						<a href="#routesjs">生成 routes/{{tableName}}.js代码</a>
-					</li>
-					<li v-if="tableName!=''">
-						<a href="#sqlMapping">生成 dao/sqlMapping.js代码</a>
-					</li>
-					<li v-if="tableName!=''">
-						<a href="#dao">生成 dao/dao.js代码</a>
-					</li>
-				</ul>
-			</nav>
-			<article>
-				<h2>生成表{{tableName}}调用代码</h2>
-				<div class="code">
-					<section id="confdb" v-if="databaseName!=''">
-						<h4><strong>生成 conf/db.js 代码</strong></h4>
-						<div class="gary">MySql数据库连接配置</div>
-						<h4>代码</h4>
-						<div class="gary">
-							<pre id="confdb_copy">
+  <body>
+    <div id="app">
+      <nav>
+        <div class="nav-title">Node单表代码生成工具</div>
+        <div class="nav-select">
+          <select @change="select_database">
+            <option value="">--请选择数据库--</option>
+            <template v-for="(item,index) in database">
+              <option :value="item.Database">{{item.Database}}</option>
+            </template>
+          </select>
+          <select
+            v-if="databaseName!=''"
+            v-model="tableName"
+            @change="select_table"
+          >
+            <option v-for="(item,index) in table" :value="item.name">
+              {{item.name}}
+            </option>
+          </select>
+        </div>
+        <ul>
+          <li v-if="databaseName!=''">
+            <a href="#confdb">生成 conf/db.js代码</a>
+          </li>
+          <li v-if="tableName!=''">
+            <a href="#appjs">生成 app.js入口路由代码</a>
+          </li>
+          <li v-if="tableName!=''">
+            <a href="#routesjs">生成 routes/{{tableName}}.js代码</a>
+          </li>
+          <li v-if="tableName!=''">
+            <a href="#sqlMapping">生成 dao/sqlMapping.js代码</a>
+          </li>
+          <li v-if="tableName!=''">
+            <a href="#dao">生成 dao/dao.js代码</a>
+          </li>
+        </ul>
+      </nav>
+      <article>
+        <h2>生成表{{tableName}}调用代码</h2>
+        <div class="code">
+          <section id="confdb" v-if="databaseName!=''">
+            <h4><strong>生成 conf/db.js 代码</strong></h4>
+            <div class="gary">MySql数据库连接配置</div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('confdb_copy','db.js代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="confdb_copy">
 /**
  * 整个node站点MySql数据库连接配置串
  * 存储在大火兔提供的node框架conf文件夹下，只要替换db.js或者复制以上连接串找到db.js内即可
@@ -80,47 +95,72 @@ module.exports = {
 		port: {{connection.port}} 		//端口号
 	}
 };
-			                </pre>
-						</div>
-					</section>
-					<section id="appjs" v-if="tableName!=''">
-						<h4><strong>生成 app.js 入口路由代码</strong></h4>
-						<div class="gary">生成app.js 入口业务模块路由代码</div>
-						<h4>调用说明</h4>
-						<div class="gary">
-							<pre>
+			                </pre
+              >
+            </div>
+          </section>
+          <section id="appjs" v-if="tableName!=''">
+            <h4><strong>生成 app.js 入口路由代码</strong></h4>
+            <div class="gary">生成app.js 入口业务模块路由代码</div>
+            <h4>调用说明</h4>
+            <div class="gary">
+              <pre>
 //放在示例路由代码下面
 //var example = require("./routes/example");
-							</pre>
-						</div>
-						<h4>代码</h4>
-						<div class="gary">
-							<pre>
+							</pre
+              >
+            </div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('appjs_copy1','app.js入口路由代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="appjs_copy1">
 //{{tableName}}路由
 var {{tableName}} = require("./routes/{{tableName}}");
-			                </pre>
-						</div>
-						<h4>调用说明</h4>
-						<div class="gary">
-							<pre>
+			                </pre
+              >
+            </div>
+            <h4>调用说明</h4>
+            <div class="gary">
+              <pre>
 //放在 pintuer Api 示例代码下面
 //app.use("/example", example);
-							</pre>
-						</div>
-						<h4>代码</h4>
-						<div class="gary">
-							<pre>
+							</pre
+              >
+            </div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('appjs_copy2','app.js入口路由调用代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="appjs_copy2">
 //{{tableName}}
 app.use("/{{tableName}}", {{tableName}});
-			                </pre>
-						</div>
-					</section>
-					<section id="sqlMapping" v-if="tableName!=''">
-						<h4><strong>生成 dao/{{tableName}}/sqlMapping.js</strong></h4>
-						<div class="gary">生成 dao/{{tableName}}/sqlMapping.js SQL语句代码</div>
-						<h4>代码</h4>
-						<div class="gary">
-							<pre id="sqlMapping_copy">
+			                </pre
+              >
+            </div>
+          </section>
+          <section id="sqlMapping" v-if="tableName!=''">
+            <h4><strong>生成 dao/{{tableName}}/sqlMapping.js</strong></h4>
+            <div class="gary">
+              生成 dao/{{tableName}}/sqlMapping.js SQL语句代码
+            </div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('sqlMapping_copy','sqlMapping.js代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="sqlMapping_copy">
 /*
 {{tableName}}:CRUD SQL语句
 路径:dao/{{tableName}}/sqlMapping.js
@@ -150,14 +190,20 @@ var {{tableName}} = {
 
 module.exports = {{tableName}};
 			                </pre>
-						</div>
-					</section>
-					<section id="routesjs" v-if="tableName!=''">
-						<h4><strong>生成 routes/{{tableName}}.js</strong></h4>
-						<div class="gary">生成 routes/{{tableName}}.js 路由代码</div>
-						<h4>代码</h4>
-						<div class="gary">
-							<pre id="routesjs_copy">
+            </div>
+          </section>
+          <section id="routesjs" v-if="tableName!=''">
+            <h4><strong>生成 routes/{{tableName}}.js</strong></h4>
+            <div class="gary">生成 routes/{{tableName}}.js 路由代码</div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('routesjs_copy','路由代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="routesjs_copy">
 var express = require('express');
 var router = express.Router();
 var $dao = require('../dao/{{tableName}}/dao');
@@ -221,15 +267,22 @@ router.get('/page', function (req, res, next) {
 */
 
 module.exports = router;
-			                </pre>
-						</div>
-					</section>
-					<section id="dao" v-if="tableName!=''">
-						<h4><strong>生成 dao/{{tableName}}/dao.js</strong></h4>
-						<div class="gary">生成 dao/{{tableName}}/dao.js 逻辑代码</div>
-						<h4>代码</h4>
-						<div class="gary">
-							<pre id="dao_copy">
+			                </pre
+              >
+            </div>
+          </section>
+          <section id="dao" v-if="tableName!=''">
+            <h4><strong>生成 dao/{{tableName}}/dao.js</strong></h4>
+            <div class="gary">生成 dao/{{tableName}}/dao.js 逻辑代码</div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('dao_copy','dao.js逻辑代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="dao_copy">
 /*
 说明:实现与MySQL交互
 方式:Api方式
@@ -550,143 +603,203 @@ module.exports = {
 	},
 };								
 			                </pre>
-						</div>
-					</section>
-				</div>
-				<div class="mads">
-					作者：
-					<a href="https://www.dahuotu.com/" target="_blank">大火兔</a>
-				</div>
-			</article>
-		</div>
-	</body>
-	<script type="text/javascript" src="../javascripts/vue.min.js"></script>
-	<script type="text/javascript" src="../javascripts/axios.min.js"></script>
-	<script>
-		var vm = new Vue({
-			el: '#app',
-			data: {
-				connection: [],
-				database: [],
-				databaseName: '',
-				table: [],
-				tableName: '',
-				column: [],
-				keys: [],
-				columns: []
-			},
-			mounted() {
-				var that = this;
-				this.load_database();
-			},
-			methods: {
-				load_database() {
-					//查询所有数据
-					axios.get('/api/config', {
-							params: {
-								type: 'database'
-							}
-						})
-						.then(function(response) {
-							if(response.data.code == 0) {
-								vm.database = response.data.data;
-							}
-						})
-						.catch(function(error) {
-							console.log(error);
-						})
-						.then(function() {
-							// 总是会执行
-						});
-				},
-				select_database(e) {
-					//选中数据库
-					vm.databaseName = e.target.value;
-					vm.load_connection();
-					vm.load_tables(e.target.value);
-				},
-				load_connection() {
-					//查询连接配置
-					axios.get('/api/connection', {
-							params: {}
-						})
-						.then(function(response) {
-							if(response.data.code == 0) {
-								vm.connection = response.data.data[0];
-							}
-						})
-						.catch(function(error) {
-							console.log(error);
-						})
-						.then(function() {
-							// 总是会执行
-						});
-				},
-				load_tables(e) {
-					//查询库下的所有表
-					axios.get('/api/config', {
-							params: {
-								type: 'table',
-								database: e
-							}
-						})
-						.then(function(response) {
-							if(response.data.code == 0) {
-								vm.table = response.data.data;
-							}
-						})
-						.catch(function(error) {
-							console.log(error);
-						})
-						.then(function() {
-							// 总是会执行
-						});
-				},
-				select_table(e) {
-					vm.tableName = e.target.value;
-					vm.load_column(e.target.value);
-				},
-				load_column(e) {
-					//获取选中表的所有字段
-					axios.get('/api/config', {
-							params: {
-								type: 'column',
-								database: vm.databaseName,
-								table: e
-							}
-						})
-						.then(function(response) {
-							if(response.data.code == 0) {
-								vm.column = response.data.data;
-								vm.filter_keys(response.data.data);
-								vm.filter_columns(response.data.data);
-							}
-						})
-						.catch(function(error) {
-							console.log(error);
-						})
-						.then(function() {
-							// 总是会执行
-						});
-				},
-				filter_keys(e) {
-					//过滤主键
-					let arr = e;
-					let newArr = arr.filter((item, i, arr) => {
-						return item['约束'] == 'PRI'
-					})
-					vm.keys = newArr;
-				},
-				filter_columns(e) {
-					//过滤非主键字段
-					let arr = e;
-					let newArr = arr.filter((item, i, arr) => {
-						return item['约束'] != 'PRI'
-					})
-					vm.columns = newArr;
-				},
-			},
-		});
-	</script>
+            </div>
+          </section>
+        </div>
+        <div class="mads">
+          作者：
+          <a href="https://www.dahuotu.com/" target="_blank">大火兔</a>
+        </div>
+      </article>
+      <div class="layer" ref="layer_alert">
+        <div class="alert">
+          <p ref="layer_msg"></p>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../javascripts/vue.min.js"></script>
+  <script type="text/javascript" src="../javascripts/axios.min.js"></script>
+  <script>
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        connection: [],
+        database: [],
+        databaseName: "",
+        table: [],
+        tableName: "",
+        column: [],
+        keys: [],
+        columns: [],
+      },
+      mounted() {
+        var that = this;
+        this.load_database();
+      },
+      methods: {
+        load_database() {
+          //查询所有数据
+          axios
+            .get("/api/config", {
+              params: {
+                type: "database",
+              },
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.database = response.data.data;
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        select_database(e) {
+          //选中数据库
+          vm.databaseName = e.target.value;
+          vm.load_connection();
+          vm.load_tables(e.target.value);
+        },
+        load_connection() {
+          //加载连接配置
+          axios
+            .get("/api/connection", {
+              params: {},
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.connection = response.data.data[0];
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        load_tables(e) {
+          //加载库下的所有表
+          axios
+            .get("/api/config", {
+              params: {
+                type: "table",
+                database: e,
+              },
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.table = response.data.data;
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        select_table(e) {
+          //选择表
+          vm.tableName = e.target.value;
+          vm.load_column(e.target.value);
+        },
+        load_column(e) {
+          //获取选中表的所有字段
+          axios
+            .get("/api/config", {
+              params: {
+                type: "column",
+                database: vm.databaseName,
+                table: e,
+              },
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.column = response.data.data;
+                vm.filter_keys(response.data.data);
+                vm.filter_columns(response.data.data);
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        filter_keys(e) {
+          //过滤主键
+          let arr = e;
+          let newArr = arr.filter((item, i, arr) => {
+            return item["约束"] == "PRI";
+          });
+          vm.keys = newArr;
+        },
+        filter_columns(e) {
+          //过滤非主键字段
+          let arr = e;
+          let newArr = arr.filter((item, i, arr) => {
+            return item["约束"] != "PRI";
+          });
+          vm.columns = newArr;
+        },
+        show_msg(e) {
+          //显示提示
+          this.$refs.layer_alert.style = "display:inline-flex;";
+          this.$refs.layer_msg.innerText = e;
+          setTimeout(function () {
+            vm.hide_msg();
+          }, 1000);
+        },
+        hide_msg() {
+          //隐藏提示
+          this.$refs.layer_alert.style = "display:none;";
+        },
+        copy_code(content, message) {
+          //复制代码
+          var str = "";
+          switch (content) {
+            default:
+              break;
+            case "confdb_copy":
+              str = this.$refs.confdb_copy.innerText;
+              break;
+            case "appjs_copy1":
+              str = this.$refs.appjs_copy1.innerText;
+              break;
+            case "appjs_copy2":
+              str = this.$refs.appjs_copy2.innerText;
+              break;
+            case "sqlMapping_copy":
+              str = this.$refs.sqlMapping_copy.innerText;
+              break;
+            case "routesjs_copy":
+              str = this.$refs.routesjs_copy.innerText;
+              break;
+            case "dao_copy":
+              str = this.$refs.dao_copy.innerText;
+              break;
+          }
+          //JS复制
+          var aux = document.createElement("textarea");
+          aux.value = str;
+          document.body.appendChild(aux);
+          aux.select();
+          document.execCommand("copy");
+          document.body.removeChild(aux);
 
+          if (message == null) {
+            vm.show_msg("复制成功");
+          } else {
+            vm.show_msg(message);
+          }
+        },
+      },
+    });
+  </script>
 </html>

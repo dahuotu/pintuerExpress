@@ -2187,6 +2187,18 @@ fetch('http://127.0.0.1:3000/{{tableName}}/page', {
 					})
 					vm.columns = newArr;
 				},
+				show_msg(e) {
+					//显示提示
+					this.$refs.layer_alert.style = "display:inline-flex;";
+					this.$refs.layer_msg.innerText = e;
+					setTimeout(function () {
+						vm.hide_msg();
+					}, 1000);
+				},
+				hide_msg() {
+					//隐藏提示
+					this.$refs.layer_alert.style = "display:none;";
+				},
 			},
 		});
 	</script>
