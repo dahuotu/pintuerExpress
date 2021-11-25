@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+      name="viewport"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="full-screen" content="yes" />
+    <meta name="x5-orientation" content="portrait" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta content="dahuotu" name="author" />
+    <title>Antd前端代码生成工具</title>
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+    <script
+      type="text/javascript"
+      src="../javascripts/flexible.min.js"
+    ></script>
+    <style type="text/css"></style>
+  </head>
+
+  <body>
+    <div id="app">
+      <nav>
+        <div class="nav-title">Antd前端代码生成工具</div>
+        <div class="nav-select">
+          <select @change="select_database">
+            <option value="">--请选择数据库--</option>
+            <template v-for="(item,index) in database">
+              <option :value="item.Database">{{item.Database}}</option>
+            </template>
+          </select>
+          <select
+            v-if="databaseName!=''"
+            v-model="tableName"
+            @change="select_table"
+          >
+            <option v-for="(item,index) in table" :value="item.name">
+              {{item.name}}
+            </option>
+          </select>
+        </div>
+        <ul>
+          <li v-if="databaseName!=''">
+            <a href="#confantd">生成Antd表头变量代码</a>
+          </li>
+          <li v-if="tableName!=''">
+            <a href="#table">生成Antd表头代码</a>
+          </li>
+        </ul>
+      </nav>
+      <article>
+        <h2>生成表{{tableName}}前端调用代码</h2>
+        <div class="code">
+          <section id="confantd" v-if="databaseName!=''">
+            <h4><strong>变量代码</strong></h4>
+            <div class="gary">变量</div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('confantd_copy','Antd表头变量代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="confantd_copy">
+                <template v-for="item in table">
+{{item.name}}Data,
+{{item.name}}Columns,</template>
+              </pre>
+            </div>
+            <h4><strong>常量代码</strong></h4>
+            <div class="gary">常量</div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('constantd_copy','Antd表头常量代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="constantd_copy">
+                <template v-for="item in table">
+const {{item.name}}Data = [];</template>
+              </pre>
+            </div>
+          </section>
+          <section id="table" v-if="tableName!=''">
+            <h4><strong>生成表头代码</strong></h4>
+            <div class="gary">生成表头columns代码</div>
+            <h4>代码</h4>
+            <div class="gary">
+              <div
+                class="btncopy"
+                @click="copy_code('table_copy','表头columns代码复制成功！')"
+              >
+                复制
+              </div>
+              <pre ref="table_copy">
+const {{tableName}}Columns = [
+<template v-for="item in columns">{
+    title: "{{item['说明']}}",
+    dataIndex: "{{item['字段名']}}",
+  },</template>
+];
+			        </pre>
+            </div>
+          </section>
+        </div>
+        <div class="mads">
+          作者：
+          <a href="https://www.dahuotu.com/" target="_blank">大火兔</a>
+        </div>
+      </article>
+      <div class="layer" ref="layer_alert">
+        <div class="alert">
+          <p ref="layer_msg"></p>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../javascripts/vue.min.js"></script>
+  <script type="text/javascript" src="../javascripts/axios.min.js"></script>
+  <script>
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        connection: [],
+        database: [],
+        databaseName: "",
+        table: [],
+        tableName: "",
+        column: [],
+        keys: [],
+        columns: [],
+      },
+      mounted() {
+        var that = this;
+        this.load_database();
+      },
+      methods: {
+        load_database() {
+          //查询所有数据
+          axios
+            .get("/api/config", {
+              params: {
+                type: "database",
+              },
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.database = response.data.data;
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        select_database(e) {
+          //选中数据库
+          vm.databaseName = e.target.value;
+          vm.load_connection();
+          vm.load_tables(e.target.value);
+        },
+        load_connection() {
+          //加载连接配置
+          axios
+            .get("/api/connection", {
+              params: {},
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.connection = response.data.data[0];
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        load_tables(e) {
+          //加载库下的所有表
+          axios
+            .get("/api/config", {
+              params: {
+                type: "table",
+                database: e,
+              },
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.table = response.data.data;
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        select_table(e) {
+          //选择表
+          vm.tableName = e.target.value;
+          vm.load_column(e.target.value);
+        },
+        load_column(e) {
+          //获取选中表的所有字段
+          axios
+            .get("/api/config", {
+              params: {
+                type: "column",
+                database: vm.databaseName,
+                table: e,
+              },
+            })
+            .then(function (response) {
+              if (response.data.code == 0) {
+                vm.column = response.data.data;
+                vm.filter_keys(response.data.data);
+                vm.filter_columns(response.data.data);
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .then(function () {
+              // 总是会执行
+            });
+        },
+        filter_keys(e) {
+          //过滤主键
+          let arr = e;
+          let newArr = arr.filter((item, i, arr) => {
+            return item["约束"] == "PRI";
+          });
+          vm.keys = newArr;
+        },
+        filter_columns(e) {
+          //过滤非主键字段
+          let arr = e;
+          let newArr = arr.filter((item, i, arr) => {
+            return item["约束"] != "PRI";
+          });
+          vm.columns = newArr;
+        },
+        show_msg(e) {
+          //显示提示
+          this.$refs.layer_alert.style = "display:inline-flex;";
+          this.$refs.layer_msg.innerText = e;
+          setTimeout(function () {
+            vm.hide_msg();
+          }, 1000);
+        },
+        hide_msg() {
+          //隐藏提示
+          this.$refs.layer_alert.style = "display:none;";
+        },
+        copy_code(content, message) {
+          //复制代码
+          var str = "";
+          switch (content) {
+            default:
+              break;
+            case "confantd_copy":
+              str = this.$refs.confantd_copy.innerText;
+              break;
+            case "constantd_copy":
+              str = this.$refs.constantd_copy.innerText;
+              break;
+            case "table_copy":
+              str = this.$refs.table_copy.innerText;
+              break;
+          }
+          //JS复制
+          var aux = document.createElement("textarea");
+          aux.value = str;
+          document.body.appendChild(aux);
+          aux.select();
+          document.execCommand("copy");
+          document.body.removeChild(aux);
+
+          if (message == null) {
+            vm.show_msg("复制成功");
+          } else {
+            vm.show_msg(message);
+          }
+        },
+      },
+    });
+  </script>
+</html>

@@ -571,7 +571,7 @@ module.exports = {
 	queryPage: function (req, res, next) {
 		//通过指定条件查询分页列表,对应路由page
 		var param = req.query;
-		if (<template v-for="(item,index) in columns"> param.{{item['字段名']}}==null <template v-if="index!=(columns.length-1)">||</template></template> || param.index == null || param.size == null) {
+		if (param.index == null || param.size == null) {
 			result = {
 				code: -1,
 				msg: '参数错误'
@@ -581,23 +581,56 @@ module.exports = {
 		}
 		pool.getConnection(function (err, connection) {
 			var beign = (Number(param.index) - 1) * Number(param.size);
-			var end = Number(param.index) * Number(param.size);
-			connection.query($sql.queryPage, [<template v-for="(item,index) in columns">param.{{item['字段名']}}<template v-if="index!=(columns.length-1)">,</template></template>, beign, end], function (err2, result) {
-				if (result != null) {
-					result = {
-						code: 0,
-						msg: '查询成功',
-						data: result
-					};
+			var end = Number(param.size);
+			var sqlWhere = 'SELECT * FROM {{tableName}} WHERE 1=1';
+			var sqlTotal = `SELECT COUNT(0) AS 'total' FROM {{tableName}} WHERE 1=1`;
+			var sqlPara = [];
+      <template v-for="(item,index) in columns">
+                        if (param.{{item['字段名']}} != null && param.{{item['字段名']}} != '') {
+                          sqlWhere += ' AND {{item['字段名']}}=? ';
+                          sqlTotal += ' AND {{item['字段名']}}=? ';
+                          sqlPara.push(param.{{item['字段名']}});
+                        },
+      </template>
+			if (beign != null && end != null) {
+				sqlWhere += ' LIMIT ?,?';
+				sqlPara.push(beign, end);
+			}
+			//查询总记录数量
+			connection.query(sqlTotal, sqlPara, function (err1, result1) {
+				if (result1 != null) {
+					//查询列表
+					connection.query(sqlWhere, sqlPara, function (err2, result) {
+						if (result != null) {
+							result = {
+								code: 0,
+								msg: '查询成功',
+								data: {
+									total: String(result1[0].total),
+									current: param.index,
+									size: param.size,
+									list: result,
+								}
+							};
+						} else {
+							result = {
+								code: -1,
+								msg: '查询失败' + err2,
+								data: []
+							};
+						}
+						$util.jsonMsg(res, result);
+						connection.release();
+					});
 				} else {
 					result = {
 						code: -1,
-						msg: '查询失败' + err2,
+						msg: '查询失败' + err1,
 						data: []
 					};
+					$util.jsonMsg(res, result);
+					connection.release();
 				}
-				$util.jsonMsg(res, result);
-				connection.release();
 			});
 		});
 	},
