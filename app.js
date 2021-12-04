@@ -1,6 +1,7 @@
 var createError = require("http-errors");
-var express = require("express");
+
 var cors = require('cors');
+var express = require("express");
 var path = require("path");
 var favicon = require('serve-favicon');
 var cookieParser = require("cookie-parser");
@@ -38,6 +39,7 @@ app.use("/example", example);
 app.use("/api", apiRouter);
 app.use("/help", express.static(__dirname + "/public/docs/api.html"));
 app.use("/tool", express.static(__dirname + "/public/tools/tool.html"));
+app.use("/antd", express.static(__dirname + "/public/tools/antd.html"));
 
 // 捕获404错误
 app.use(function (req, res, next) {
