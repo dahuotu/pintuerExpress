@@ -1,11 +1,25 @@
 ### 框架说明
->基于Express，集成常用功能，其他功能自行扩展
+
+>拼图通用Express Node框架，集成常用功能，提供示例，代码生成，API文档生成功能。 
 
 ### 功能说明
 >针对新手：提供jada方式的演示
->针对老手：提供数据库增删改查调用代码生成，提供API调用文档代码生成
+
+>针对老手：提供数据库增删改查及CURD调用代码生成，提供API调用文档代码生成功能
+### 已有功能
+>代码生成
+
+>API文档生成
+
+>Antd Vue前端代码生成
+
+### 后续开发
+> jwt Token认证
+
+> 日常正则
 
 ### 目录结构
+```
 <pre>
 pintuerExpress
 ├─bin
@@ -15,18 +29,20 @@ pintuerExpress
 ├─public
 │  ├─docs
 │  │     api.html
-│  │     url.txt
 │  ├─images
 │  ├─javascripts
 │  │     axios.min.js
+│  │     clipboard.min.js
 │  │     flexible.min.js
 │  │     vue.min.js
 │  ├─stylesheets
 │  │     style.css
 │  ├─tools
+│  │     antd.html
 │  │     tool.html
 │  └─favicon.ico      
 ├─routes
+│       api.js
 │       index.js
 │       jade.js
 │       example.js
@@ -41,6 +57,7 @@ pintuerExpress
 └─readme.md
 </pre>
 
+```
 ### 结构说明
 
 app.js
@@ -75,4 +92,4 @@ views
 > npm run start 
 
 #### yarn 方式
->yarn run start
+> yarn run start

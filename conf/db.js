@@ -6,8 +6,8 @@ module.exports = {
 	mysql: {
 		host: '127.0.0.1', 	//数据主机地址
 		user: 'root',	   	//数据库用户名
-		password: '',		//数据库密码
-		database: 'test',	//数据库名称
+		password: 'root',		//数据库密码
+		database: 'dahuotu',	//数据库名称
 		port: 3306 			//端口号
 	}
 };
